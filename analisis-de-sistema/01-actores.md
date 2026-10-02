@@ -1,4 +1,3 @@
-@'
 # Actores del sistema
 
 ## Contexto
@@ -25,4 +24,3 @@ El **Sistema de Gestión de Programas Sociales** reemplaza esos padrones dispers
 ## Actores que no se consideran en esta versión
 
 RENIEC y SISFOH no se consideran actores en esta primera versión: la validación del DNI se limita a cruzar los datos ya registrados en el propio sistema municipal. Su integración queda planteada como una segunda fase del proyecto.
-'@ | Set-Content analisis-de-sistema/01-actores.md -Encoding utf8

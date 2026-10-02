@@ -1,4 +1,3 @@
-@'
 # Drivers arquitectónicos
 
 ## Drivers identificados
@@ -22,4 +21,3 @@
 | RNF-06 (Auditabilidad) | Sí | Exige registrar usuario, fecha y motivo de cada cambio. Eso afecta el modelo de datos y atraviesa todos los módulos que modifican el padrón. |
 | RF-10 (Exportar padrón en Excel/PDF) | No | Es una funcionalidad que se resuelve dentro del módulo de Cobertura y Reportes, sin decisiones estructurales importantes. |
 | RC10 (Git y GitHub) | No | Es una restricción del proceso de desarrollo; no limita la estructura ni el funcionamiento del sistema. |
-'@ | Set-Content analisis-de-sistema/06-drivers-arquitectonicos.md -Encoding utf8

@@ -1,4 +1,3 @@
-@'
 # Restricciones
 
 ## Restricciones de la propuesta
@@ -23,4 +22,3 @@
 | RC11 | Legal | Protección de datos personales | El sistema maneja datos personales (DNI, dirección); su tratamiento debe respetar la normativa peruana de protección de datos personales (Ley N.° 29733). |
 | RC12 | Organizacional | Presupuesto municipal limitado | La solución debe ser de bajo costo de infraestructura y operación, por eso se limita a dos servidores. |
 | RC13 | Organizacional | Usuarios con poca experiencia | Los dirigentes de comité tienen poca experiencia con tecnología, por lo que se requiere capacitación y una interfaz simple. |
-'@ | Set-Content analisis-de-sistema/05-restricciones.md -Encoding utf8
