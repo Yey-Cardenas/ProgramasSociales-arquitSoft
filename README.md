@@ -1,7 +1,7 @@
 ﻿# Sistema de Gestión de Programas Sociales – Huamanga
 
 ## Integrantes
-Cárdenas García, Yery May
+Cárdenas García, Yery May  
 Chipana Nuñez, Ever Neils
 
 ## Descripción
