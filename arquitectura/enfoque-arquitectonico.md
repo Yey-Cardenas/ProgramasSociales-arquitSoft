@@ -63,9 +63,9 @@ sequenceDiagram
 
 | Módulo | Requisitos relacionados | Responsabilidad |
 |---|---|---|
-| Autenticación y autorización | RF-12, RF-13, RNF-04 | Validar credenciales y aplicar permisos por rol. ASP.NET Core Identity podrá utilizarse si está contemplado en la implementación. |
-| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Registrar y actualizar beneficiarios y conservar el historial de cambios. |
-| Detección de duplicados | RF-02, RF-04 | Comprobar duplicados de DNI según las reglas del sistema y comunicar las alertas correspondientes. |
+| Autenticación y autorización | RF-12, RF-13, RNF-04 | Se utilizará ASP.NET Core Identity con autenticación basada en cookies y autorización por roles para la aplicación web MVC con Razor. JWT no será el mecanismo predeterminado; solo se evaluará si se define una API para clientes independientes. Esta es la decisión de diseño prevista, no una afirmación de que ya esté implementada. |
+| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Separar la identidad de la persona de sus inscripciones por programa y comité, gestionar el padrón y conservar el historial de cambios. |
+| Detección de duplicados | RF-02, RF-04 | Bloquear inscripciones activas repetidas en el mismo programa y comité; alertar y derivar a revisión los casos detectados en otro comité del mismo programa. La coincidencia en otro programa no se considera automáticamente un duplicado. |
 | Revalidación periódica | RF-06 | Gestionar el proceso de revalidación de beneficiarios según la periodicidad definida. |
 | Notificaciones | RF-07 | Preparar y enviar notificaciones mediante un gateway externo SMS/WhatsApp. |
 | Cobertura y reportes | RF-08, RF-09, RF-10 | Consultar información y generar reportes de beneficiarios activos por zona. |

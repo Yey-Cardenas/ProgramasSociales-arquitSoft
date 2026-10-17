@@ -56,9 +56,9 @@ La solución se despliega como un único sistema organizado en módulos cohesion
 
 | Módulo | Requisitos | Responsabilidad |
 | :--- | :--- | :--- |
-| Autenticación y autorización | RF-12, RF-13, RNF-04 | Validar credenciales y controlar el acceso por roles. ASP.NET Core Identity podrá utilizarse si forma parte de la implementación. |
-| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Registrar y actualizar beneficiarios por comité y conservar el historial de cambios. |
-| Detección de duplicados | RF-02, RF-04 | Comprobar duplicados de DNI según las reglas del sistema y generar alertas para la Sub Gerencia. |
+| Autenticación y autorización | RF-12, RF-13, RNF-04 | Se utilizará ASP.NET Core Identity con autenticación basada en cookies y autorización por roles, coherente con la aplicación web ASP.NET Core MVC con vistas Razor. JWT no será el mecanismo predeterminado; solo se evaluará si se define una API para clientes independientes. Esta es la decisión de diseño prevista, no una afirmación de que ya esté implementada. |
+| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Mantener la identidad de la persona separada de sus inscripciones por programa y comité, gestionar el padrón y conservar el historial de cambios. |
+| Detección de duplicados | RF-02, RF-04 | Bloquear inscripciones activas repetidas en el mismo programa y comité; alertar y derivar a revisión los casos detectados en otro comité del mismo programa. La coincidencia en otro programa no se considera automáticamente un duplicado. |
 | Revalidación periódica | RF-06 | Gestionar el proceso de revalidación según la periodicidad definida. |
 | Notificaciones | RF-07 | Gestionar las notificaciones mediante un gateway externo SMS/WhatsApp. |
 | Cobertura y reportes | RF-08, RF-09, RF-10 | Consultar información y generar reportes de beneficiarios activos por zona. |
