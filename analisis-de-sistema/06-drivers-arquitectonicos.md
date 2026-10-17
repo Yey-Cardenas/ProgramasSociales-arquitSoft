@@ -101,3 +101,8 @@ Procedimiento mínimo: identificar el incidente; avisar al responsable designado
 
 RTO y RPO son objetivos propuestos, no garantías de servicio ni resultados probados. La Municipalidad debe aprobarlos y asignar un responsable antes de la puesta en producción.
 
+
+
+## Control de exportaciones
+
+La exportación debe aplicar autorización en el servidor y no confiar únicamente en ocultar botones de la interfaz. Los permisos consideran el rol y el ámbito de comité. Se registran metadatos de la operación sin copiar el contenido del archivo a los logs; las exportaciones completas requieren permiso específico. Los reportes agregados se priorizan cuando cumplen la finalidad.

@@ -76,3 +76,8 @@ Procedimiento mínimo: identificar el incidente; avisar al responsable designado
 
 RTO y RPO son objetivos propuestos, no garantías de servicio ni resultados probados. La Municipalidad debe aprobarlos y asignar un responsable antes de la puesta en producción.
 
+
+
+## Seguridad y auditabilidad de exportaciones
+
+Las exportaciones deben aplicar autorización por rol y ámbito en el servidor, minimizar los campos personales y auditar usuario, fecha/hora, formato, filtros/ámbito, cantidad de registros y resultado, sin registrar el contenido del archivo ni DNI completos en logs. Consultar el padrón no concede por sí solo permiso para exportarlo completo. Las pruebas deben comprobar que solicitudes no autorizadas no generan archivos.

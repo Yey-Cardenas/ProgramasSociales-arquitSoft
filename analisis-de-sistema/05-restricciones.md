@@ -65,3 +65,8 @@ La selección del proveedor, costos, consentimiento, plantillas, límites de rei
 ## Restricciones de importación de padrones históricos
 
 Los padrones históricos se importarán primero a un área temporal de staging; no se cargarán directamente al padrón definitivo. Solo personal autorizado podrá aprobar la consolidación. Los archivos y reportes que contengan datos personales deberán tener acceso restringido y una retención definida por la Municipalidad. Los formatos aceptados, tamaño máximo, responsables y plazos de conservación quedan pendientes de validación.
+
+
+## Restricciones de exportación de padrones
+
+Los archivos exportados contienen potencialmente datos personales y estarán sujetos a permisos por rol y ámbito. El dirigente se limitará a su comité asignado; el personal municipal operará dentro de su ámbito autorizado. El padrón completo y el DNI completo no estarán disponibles por defecto en reportes generales. La Municipalidad debe definir campos permitidos, responsables de excepciones, canales de intercambio y retención de copias.

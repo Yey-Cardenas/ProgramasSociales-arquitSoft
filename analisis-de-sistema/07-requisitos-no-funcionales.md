@@ -135,3 +135,16 @@ Procedimiento mínimo: identificar el incidente; avisar al responsable designado
 
 RTO y RPO son objetivos propuestos, no garantías de servicio ni resultados probados. La Municipalidad debe aprobarlos y asignar un responsable antes de la puesta en producción.
 
+
+
+## Criterios de aceptación de exportaciones seguras
+
+- Un dirigente no puede exportar datos de otro comité modificando parámetros o URL.
+- Una solicitud no autorizada no genera archivo descargable.
+- Las exportaciones se limitan a campos y registros autorizados; el DNI completo no aparece por defecto en reportes generales.
+- Cada exportación registra usuario, fecha/hora, formato, ámbito/filtros, cantidad de registros y resultado.
+- Los logs no contienen el archivo exportado, DNI completos ni datos personales innecesarios.
+- Las exportaciones completas o excepcionales requieren permiso específico y quedan auditadas.
+- Se priorizan informes agregados cuando permiten cumplir la finalidad solicitada.
+
+Los campos permitidos y las autorizaciones excepcionales requieren aprobación municipal. Estas pruebas están pendientes de la implementación.

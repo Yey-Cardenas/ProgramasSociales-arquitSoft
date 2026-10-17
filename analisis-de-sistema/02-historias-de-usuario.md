@@ -13,7 +13,7 @@ Formato: **Como [actor], quiero [acción], para [beneficio].**
 | HU05 | Como personal de la Sub Gerencia, quiero gestionar la revalidación semestral de cada inscripción, registrar el resultado y derivar los casos dudosos, para revisar la continuidad del apoyo sin dar de baja automáticamente por falta de respuesta. |
 | HU06 | Como beneficiario, quiero recibir avisos por un canal válido cuando mi inscripción sea aprobada o deba revalidar mis datos, y que el sistema registre si el aviso fue entregado o falló, para estar informado sin exponer innecesariamente mis datos personales. |
 | HU07 | Como personal de la Sub Gerencia, quiero ver un mapa con los beneficiarios activos por zona, para identificar barrios sobre-atendidos o desatendidos. |
-| HU08 | Como personal de la Sub Gerencia, quiero generar reportes de cobertura y exportar el padrón depurado en Excel/PDF, para sustentar la distribución de recursos entre comités. |
+| HU08 | Como personal autorizado, quiero generar reportes y exportar únicamente los datos que puedo consultar según mi rol y ámbito, para sustentar decisiones sin exponer información personal innecesaria. |
 | HU09 | Como personal autorizado de la Sub Gerencia, quiero importar padrones históricos a un lote temporal, revisar errores y duplicados y aprobar su consolidación, para incorporar únicamente datos validados y poder auditar el resultado. |
 
 ## Historias adicionales propuestas por el equipo
@@ -89,4 +89,17 @@ La selección del proveedor, costos, consentimiento, plantillas, límites de rei
 7. **Cancelar o revertir:** antes de consolidar, el lote puede cancelarse sin modificar el padrón. Después de consolidar, una reversión solo podrá ejecutarse mediante una operación autorizada y auditada que identifique los cambios del lote y compruebe que no sobrescriba cambios posteriores; si no es segura, se requiere corrección manual supervisada.
 
 La importación debe respetar los permisos por comité y las reglas de duplicidad por programa. Los archivos con datos personales deberán tener acceso restringido y no se mantendrán indefinidamente en staging. El formato exacto, tamaño máximo, retención y responsables de aprobación deben validarse con la Municipalidad. Este flujo es una propuesta de diseño pendiente de implementación y pruebas.
+
+
+
+## Política de exportación segura de padrones y reportes
+
+- **Autorización por ámbito:** cada solicitud de exportación debe validar permisos en el servidor. El dirigente solo podrá exportar información de su comité asignado; el personal de la Sub Gerencia solo podrá exportar dentro del ámbito municipal autorizado. El permiso para consultar datos no concede automáticamente permiso para exportar el padrón completo.
+- **Finalidad y campos mínimos:** ofrecer reportes agregados cuando sean suficientes. Incluir datos personales solo cuando sean necesarios para la finalidad autorizada. El DNI completo no debe incluirse por defecto en reportes generales; si resulta imprescindible, debe existir un permiso específico y una justificación.
+- **Auditoría:** registrar usuario, fecha/hora, tipo de exportación, formato, filtros o ámbito solicitado, cantidad de registros y resultado de la operación. No guardar el contenido del archivo, DNI completos ni otros datos sensibles en los logs.
+- **Descarga protegida:** generar el archivo únicamente después de autorizar la solicitud; informar que contiene datos personales cuando corresponda y evitar que las URL temporales de descarga queden reutilizables o expuestas en registros. No generar archivos para solicitudes denegadas.
+- **Uso y conservación:** indicar al usuario que debe almacenar y compartir el archivo solo por canales autorizados y eliminar copias cuando dejen de ser necesarias, de acuerdo con la política municipal. El acceso a exportaciones completas debe limitarse y revisarse periódicamente.
+- **Excepciones:** cualquier exportación fuera del alcance habitual debe ser aprobada por la persona que la Municipalidad designe y quedar auditada.
+
+Los permisos exactos, campos exportables, retención de archivos y responsables de autorizar excepciones deben aprobarse con la Municipalidad. Estas reglas describen el comportamiento esperado y están pendientes de implementación y pruebas.
 
