@@ -20,5 +20,16 @@ Formato: **Como [actor], quiero [acción], para [beneficio].**
 
 | ID | Historia de usuario | Actor | Justificación |
 |----|---------------------|-------|---------------|
-| HU10 | Como dirigente de comité o personal de la Sub Gerencia, quiero iniciar sesión con mis credenciales según mi rol, para acceder solo a la información que me corresponde. | Dirigente / Personal de la Sub Gerencia | La propuesta incluye un módulo de Autenticación y exige accesos restringidos por rol para proteger datos sensibles. |
+| HU10 | Como dirigente de comité o personal autorizado de la Sub Gerencia, quiero iniciar sesión con permisos según mi rol y ámbito asignado, para acceder solo a la información que me corresponde. | Dirigente / Personal de la Sub Gerencia | La propuesta incluye un módulo de Autenticación y exige accesos restringidos por rol para proteger datos sensibles. |
 | HU11 | Como dirigente de comité, quiero registrar beneficiarios sin conexión y consultar el estado de su sincronización, para trabajar en zonas con baja cobertura sin perder información ni generar altas duplicadas. | Dirigente de Comité | La PWA debe conservar los registros pendientes, sincronizarlos al recuperar la conexión, mostrar fallos o conflictos para revisión y permitir reintentos sin duplicar operaciones. |
+
+## Criterios de aceptación de autorización
+
+- Un dirigente inicia sesión y solo puede ver o modificar los registros del comité que tiene asignado.
+- Si un dirigente intenta abrir directamente una ruta o enviar una solicitud para acceder a otro comité, el servidor la rechaza aunque la interfaz oculte esos datos.
+- El personal autorizado de la Sub Gerencia puede consultar información consolidada y resolver alertas dentro del ámbito municipal que le corresponda.
+- Solo el personal designado puede crear, desactivar o reasignar usuarios, roles y comités.
+- Las decisiones sobre posibles duplicados entre comités registran usuario responsable, fecha y hora, resultado y motivo.
+- Las operaciones pendientes creadas offline vuelven a validarse contra los permisos vigentes al sincronizarse; no se aceptan automáticamente si la cuenta fue desactivada o perdió acceso al comité.
+
+Los criterios deberán validarse con la Municipalidad y convertirse en pruebas de aceptación durante la implementación.

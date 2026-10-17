@@ -10,8 +10,8 @@ El **Sistema de Gestión de Programas Sociales** reemplaza esos padrones dispers
 
 | Actor | Rol y responsabilidades en el sistema |
 |-------|----------------------------------------|
-| **Dirigente de comité** | Registrar beneficiarios con su DNI, comprobar si ya están inscritos en otro comité, actualizar el padrón, marcar beneficiarios como inactivos y apoyar la revalidación de datos. Cuando la PWA y la conectividad lo permitan, podrá trabajar con las capacidades offline definidas para la aplicación. |
-| **Personal municipal de la Sub Gerencia de Programas Sociales** | Supervisar el padrón consolidado, revisar alertas de duplicados, consultar la cobertura por zona, generar reportes, exportar el padrón depurado y supervisar la gestión de los programas sociales. |
+| **Dirigente de comité** | Registrar y actualizar beneficiarios del comité que tiene asignado, iniciar la revisión de alertas de duplicidad y apoyar la revalidación. No podrá consultar ni modificar los padrones detallados de otros comités. Cuando la PWA y la conectividad lo permitan, podrá trabajar con las capacidades offline definidas para la aplicación. |
+| **Personal municipal autorizado de la Sub Gerencia de Programas Sociales** | Supervisar el padrón consolidado dentro de su ámbito autorizado, revisar y resolver alertas de duplicados, consultar cobertura, generar reportes y exportar padrones según sus permisos. Solo el personal expresamente designado podrá administrar usuarios, roles y asignaciones de comité. |
 | **Beneficiario (destinatario de notificaciones)** | Recibir avisos sobre la aprobación de su inscripción y la necesidad de revalidar sus datos. En esta versión se considera destinatario de notificaciones, no un usuario que interactúa directamente con las vistas de la aplicación. |
 
 Los dos primeros actores corresponden a los **“dirigentes y personal municipal”** representados como usuarios en el diagrama de estilo arquitectónico. El beneficiario se mantiene identificado por su participación en el proceso de notificaciones, pero no se representa como usuario directo de la interfaz en dicho diagrama.

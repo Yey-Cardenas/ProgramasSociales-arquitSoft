@@ -42,6 +42,18 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 
 Se define la opción A como despliegue recomendado: **Azure App Service** para alojar la aplicación ASP.NET Core 10 MVC y **Azure SQL Database** como servicio administrado de base de datos separado. Antes de una implementación real se comprobará la compatibilidad de las consultas, tipos de datos, migraciones de Entity Framework Core 10 y demás funcionalidades necesarias. El acceso a la base de datos se restringirá a la aplicación, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se estimarán los costos mensuales y se probarán los respaldos y la restauración. Esta es una decisión de diseño documentada; el repositorio todavía no contiene una aplicación desplegada.
 
+## Política de autorización por rol y comité
+
+- **Dirigente de comité:** solo puede consultar y gestionar los beneficiarios, inscripciones y operaciones de su comité asignado. No puede consultar ni modificar los registros detallados de otros comités.
+- **Personal autorizado de la Sub Gerencia:** puede consultar el padrón consolidado y gestionar las tareas de supervisión, reportes y revisión de posibles duplicados dentro del ámbito municipal que tenga autorizado.
+- **Administrador designado de usuarios:** función asignada únicamente al personal municipal autorizado por la Municipalidad. Puede crear, actualizar o desactivar cuentas, asignar roles y vincular dirigentes con sus comités. La asignación o reasignación debe quedar registrada en la auditoría.
+- **Decisiones sobre duplicados:** corresponde al personal autorizado de la Sub Gerencia revisar y registrar el resultado, el motivo y el responsable; el dirigente no puede aprobar por sí solo un caso que involucre a otro comité.
+- **Aplicación de permisos:** cada solicitud debe validarse en el servidor, no solo ocultando botones o pantallas. Los intentos de acceso fuera del ámbito autorizado se rechazarán y registrarán cuando corresponda.
+- **Cambios de asignación:** cuando se reasigne o desactive una cuenta, los permisos nuevos deben aplicarse de inmediato en las siguientes solicitudes. Las operaciones offline se volverán a autorizar en el servidor al sincronizarse.
+- **Principio de mínimo privilegio:** los roles se asignan por necesidad funcional; no se presume que todo usuario municipal sea administrador.
+
+Esta política es la propuesta de diseño para documentar y validar con la Municipalidad antes de implementar. No afirma que la autorización ya esté programada o probada.
+
 ### Política de seguridad de red y credenciales
 
 En producción, Azure SQL Database no tendrá acceso público irrestricto. Se preferirá conectividad privada desde Azure App Service; si no es viable, se deberán aplicar reglas de firewall restrictivas y documentadas. Cuando sea compatible con la configuración, se preferirá la identidad administrada de App Service y permisos mínimos. Las cadenas de conexión y secretos se configurarán fuera de GitHub. Los accesos públicos temporales para desarrollo se limitarán a las IP necesarias y se retirarán al terminar las pruebas. La configuración real deberá verificarse antes del despliegue.
