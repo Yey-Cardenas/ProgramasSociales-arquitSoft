@@ -53,3 +53,8 @@ PostgreSQL, PostGIS, React, Node.js, Express y Prisma no forman parte del stack 
 ## Driver de revalidación y continuidad de inscripción
 
 La revalidación semestral se modelará por inscripción de una persona en un programa/comité. El sistema creará tareas, registrará estados y decisiones auditables, y derivará los casos dudosos a la Sub Gerencia. La ausencia de respuesta no provocará una baja automática; deberá existir un recordatorio o escalamiento según el procedimiento que apruebe la Municipalidad. Una decisión solo afectará la inscripción correspondiente y no las demás inscripciones de la persona. La regla y sus plazos requieren validación del área usuaria.
+
+
+## Resolución auditada de alertas de duplicados
+
+La Sub Gerencia designará a los usuarios autorizados para resolver alertas. El dirigente solo aportará información y no podrá decidir unilateralmente casos entre comités. Los resultados previstos son: no es duplicado, duplicado confirmado, requiere información adicional o derivado para decisión superior. Mientras no se resuelva, la nueva inscripción en conflicto no se confirma. La decisión registrará alerta, inscripciones/comités, resultado, motivo/evidencia, usuario y fecha/hora. No se borrarán ni fusionarán registros automáticamente por coincidencia de DNI; cualquier cambio posterior se realizará por una operación autorizada y auditada. La política requiere aprobación municipal.

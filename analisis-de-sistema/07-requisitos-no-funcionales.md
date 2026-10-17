@@ -83,3 +83,15 @@ Antes de aceptar la implementación se probará, como mínimo, que: (1) un dirig
 - Los recordatorios y escalamiento usan plazos aprobados por la Municipalidad.
 
 Los plazos, estados definitivos, evidencia aceptable y autoridad final deben ser aprobados por el área usuaria. Estas pruebas están pendientes de la implementación.
+
+
+## Pruebas de resolución de duplicados
+
+- Una alerta pendiente impide confirmar la nueva inscripción en conflicto.
+- Un dirigente no puede resolver una alerta que involucre a otro comité.
+- Solo personal autorizado de la Sub Gerencia puede registrar la resolución.
+- Cada resolución registra resultado, motivo/evidencia, responsable y fecha/hora.
+- Una coincidencia de DNI no elimina registros ni desactiva a la persona automáticamente.
+- Las correcciones posteriores conservan la decisión previa y quedan registradas como una nueva operación.
+
+Los roles responsables y el procedimiento final deben aprobarse con la Municipalidad. Estas pruebas están pendientes de la implementación.
