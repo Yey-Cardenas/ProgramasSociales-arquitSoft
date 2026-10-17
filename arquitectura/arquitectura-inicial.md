@@ -1,4 +1,3 @@
-@'
 # Arquitectura inicial del sistema
 
 ## Diagrama de arquitectura
@@ -97,4 +96,3 @@ flowchart LR
 ```
 
 Esta vista muestra el sistema como una caja negra: solo aparecen sus actores y los sistemas con los que se comunica. El diagrama de arquitectura, en cambio, muestra su estructura interna por capas y módulos.
-'@ | Set-Content arquitectura/arquitectura-inicial.md -Encoding utf8

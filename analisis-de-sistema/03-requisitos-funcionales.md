@@ -1,4 +1,3 @@
-@'
 # Requisitos funcionales
 
 ## Requisitos de la propuesta
@@ -40,4 +39,3 @@
 | HU09 Importar y depurar padrones | RF-11 |
 | HU10 Iniciar sesión según rol | RF-12, RF-13 |
 | HU11 Registrar sin conexión | RF-14 |
-'@ | Set-Content analisis-de-sistema/03-requisitos-funcionales.md -Encoding utf8

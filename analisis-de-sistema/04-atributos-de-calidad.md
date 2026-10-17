@@ -1,4 +1,3 @@
-@'
 # Atributos de calidad
 
 ## Escenario general
@@ -36,4 +35,3 @@ Un dirigente de comité registra a varios beneficiarios en una zona con baja cob
 | **Estímulo** | Un dirigente registra beneficiarios en una zona sin conexión a internet. |
 | **Respuesta** | La PWA guarda los registros en el dispositivo y los sincroniza automáticamente al recuperar la red. |
 | **Medida** | No se pierde ningún registro y el sistema se mantiene disponible al menos el 99% del tiempo. |
-'@ | Set-Content analisis-de-sistema/04-atributos-de-calidad.md -Encoding utf8
