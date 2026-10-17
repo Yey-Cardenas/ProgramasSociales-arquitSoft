@@ -11,7 +11,7 @@
 | RC05 | Base de datos | La base de datos objetivo para el despliegue recomendado es **Azure SQL Database**. El acceso se realizará mediante el proveedor Microsoft.EntityFrameworkCore.SqlServer de Entity Framework Core 10 y un enfoque Code-First. Antes de producción se probarán las migraciones contra Azure SQL Database y se comprobará la compatibilidad de consultas, tipos de datos, restricciones, transacciones y funciones requeridas. |
 | RC06 | Gateway de mensajería | El sistema debe integrarse con un proveedor externo de SMS/WhatsApp mediante la capa de servicios, sin acoplarlo a las vistas. El proveedor se seleccionará considerando cobertura, costos, protección de datos, requisitos de consentimiento, estados de entrega, límites de envío y política de reintentos. |
 | RC07 | Infraestructura y nube | Se recomienda desplegar la aplicación ASP.NET Core 10 MVC en Azure App Service y utilizar Azure SQL Database como servicio administrado separado. En producción se prohíbe el acceso público irrestricto a la base de datos; se prefiere conectividad privada y, si no es viable, un punto de conexión público con reglas de firewall restrictivas y documentadas. El acceso temporal desde IP pública en desarrollo debe limitarse a las IP autorizadas y retirarse al terminar las pruebas. Los secretos no se guardarán en el repositorio. |
-| RC08 | Dispositivos | La interfaz debe funcionar en navegadores web modernos y adaptarse a celulares, incluidos dispositivos Android 8 o superior, en la medida permitida por el navegador y las capacidades PWA utilizadas. |
+| RC08 | Dispositivos | La interfaz debe adaptarse a celulares y escritorio. Android 8 o superior es un objetivo sujeto a que el navegador instalado siga recibiendo actualizaciones de seguridad y soporte HTTPS, Service Workers, IndexedDB y las APIs PWA requeridas. Los dispositivos o navegadores que no cumplan esas condiciones no se declararán compatibles. La matriz inicial de prueba se documenta en los requisitos no funcionales. |
 | RC09 | Alcance de integraciones | En la primera versión, la validación del DNI se limita a cruzar los datos registrados en el propio sistema; las integraciones con RENIEC y SISFOH quedan para una segunda fase. |
 | RC10 | Control de versiones | El código fuente y la documentación deben gestionarse con Git y mantenerse en un repositorio compartido en GitHub. |
 
@@ -75,3 +75,30 @@ Los archivos exportados contienen potencialmente datos personales y estarán suj
 ## Restricciones de auditoría
 
 Los eventos de auditoría no podrán ser modificados ni eliminados por usuarios ordinarios. El acceso a la consulta del historial y a la administración de la plataforma deberá limitarse por permisos. La Municipalidad debe definir el plazo de conservación y los responsables de supervisión. La aplicación no debe registrar contraseñas, tokens ni datos personales innecesarios en los logs.
+
+
+## Matriz inicial de compatibilidad de dispositivos y navegadores
+
+Esta matriz es una propuesta para pruebas de aceptación, no una afirmación de que ya se haya comprobado la compatibilidad. Las versiones exactas deberán registrarse en cada ejecución porque los navegadores y su soporte cambian.
+
+| Plataforma | Navegador objetivo | Cobertura de prueba |
+|---|---|---|
+| Android 8 o superior | Google Chrome para Android, en una versión que todavía reciba actualizaciones de seguridad y soporte las APIs requeridas | Interfaz adaptable, inicio de sesión, permisos por rol, registro y validación de formularios, instalación/uso como PWA cuando esté disponible, almacenamiento local, operación offline, reconexión, reintentos, conflictos y cierre de sesión con operaciones pendientes |
+| Android 8 o superior (alternativa) | Microsoft Edge para Android, si está disponible y actualizado en el dispositivo de prueba | Repetir las pruebas principales y offline antes de declararlo soportado |
+| Escritorio Windows | Google Chrome y Microsoft Edge, versiones estables con soporte vigente en la fecha de prueba | Flujos principales, accesibilidad básica, exportaciones autorizadas, bloqueo por inactividad y sincronización |
+| Otros navegadores o iOS | Fuera del alcance inicial | No declarar compatibilidad hasta añadirlos a la matriz y ejecutar las pruebas correspondientes |
+
+**Regla de compatibilidad:** el requisito Android 8+ no significa que cualquier dispositivo antiguo sea compatible. El dispositivo debe tener un navegador actualizado y compatible con HTTPS, Service Workers, IndexedDB y las APIs PWA usadas. Si el navegador ya no recibe actualizaciones de seguridad o no soporta una API necesaria, se debe marcar como no compatible y documentar la limitación; no se debe debilitar la seguridad para admitirlo.
+
+**Escenarios mínimos de prueba offline:**
+1. Abrir la aplicación y autenticarse con conexión.
+2. Registrar una operación de prueba sin conexión y comprobar que aparece como pendiente, sin afirmar que está confirmada.
+3. Cerrar y volver a abrir la aplicación sin conexión y comprobar el comportamiento documentado de persistencia y bloqueo.
+4. Recuperar la conexión y comprobar sincronización, validación del servidor e idempotencia ante reintentos.
+5. Provocar un conflicto de prueba y comprobar que se marca para revisión, sin sobrescribir datos.
+6. Cerrar sesión o cambiar de usuario con operaciones pendientes y comprobar la advertencia, el aislamiento de la cola y la ausencia de borrado silencioso.
+7. Comprobar que el fallo de red, la actualización de la aplicación o la limpieza del almacenamiento del navegador no se presentan como almacenamiento infalible; documentar los límites y orientar al usuario antes de acciones que puedan perder datos.
+
+**Evidencia por ejecución:** modelo de dispositivo, versión Android/Windows, nombre y versión exacta del navegador, fecha, conectividad, resultado por escenario, defectos encontrados y capturas/logs sin datos personales reales. La matriz debe actualizarse al menos cuando cambie la versión principal del navegador o la implementación PWA.
+
+La matriz y las pruebas quedan pendientes de implementación. No se considera cumplido RNF-05 hasta conservar resultados reales en los navegadores incluidos.
