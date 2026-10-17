@@ -77,6 +77,10 @@ El servicio de base de datos definido para el despliegue recomendado es **Azure 
 
 Las reglas de integridad, las validaciones de negocio y las transacciones deberán prevenir registros inconsistentes. Los datos importados mediante staging se validarán antes de consolidarse en el padrón principal.
 
+## Política de acceso seguro a Azure SQL Database
+
+En producción, la base de datos no debe aceptar conexiones públicas irrestrictas. Se prefiere la conectividad privada desde Azure App Service. Si no es viable, se documentarán reglas de firewall restrictivas que permitan únicamente los orígenes necesarios. Cuando sea compatible con el entorno, se usará la identidad administrada de App Service con permisos mínimos. Las cadenas de conexión y credenciales deben configurarse fuera del repositorio. Cualquier acceso temporal de desarrollo se limitará a las IP autorizadas y se retirará al terminar las pruebas. Estas medidas deberán verificarse antes del despliegue; aún no se han probado en una infraestructura real.
+
 ### Verificación de compatibilidad con Azure SQL Database
 
 La capa de persistencia utilizará Entity Framework Core 10 con el proveedor Microsoft.EntityFrameworkCore.SqlServer. Las migraciones Code-First y las consultas deberán probarse contra una instancia de prueba de Azure SQL Database. La validación abarcará tipos de datos, consultas LINQ, índices, restricciones, transacciones y funciones específicas que se decida utilizar. Las cadenas de conexión y credenciales se configurarán mediante mecanismos seguros fuera del repositorio. Esta verificación está pendiente porque todavía no existe código ni migraciones en el repositorio.
