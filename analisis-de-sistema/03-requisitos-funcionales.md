@@ -5,7 +5,7 @@
 | ID | Módulo | Requisito funcional |
 |----|--------|---------------------|
 | RF-01 | Registro de beneficiarios | El sistema debe permitir a los dirigentes de comité registrar beneficiarios usando el DNI como dato obligatorio. |
-| RF-02 | Registro de beneficiarios | El sistema debe validar automáticamente si un DNI ya está registrado en otro comité, antes de aceptar la inscripción. |
+| RF-02 | Registro de beneficiarios | El sistema debe identificar a la persona por su DNI y distinguirla de sus inscripciones. Debe impedir una inscripción activa duplicada de la misma persona en el mismo programa y comité. Si existe una inscripción activa en otro comité del mismo programa, debe generar una alerta y derivar el caso a la Sub Gerencia para revisión antes de confirmar la nueva inscripción. La existencia del DNI en otro programa no se considerará por sí sola una duplicidad: se validarán las reglas de elegibilidad de cada programa. |
 | RF-03 | Registro de beneficiarios | El sistema debe permitir marcar a un beneficiario como inactivo (fallecimiento, cambio de condición o inasistencia prolongada). |
 | RF-04 | Detección de duplicados | El sistema debe alertar al personal de la Sub Gerencia cuando se detecte un posible duplicado, para su evaluación. |
 | RF-05 | Detección de duplicados | El sistema debe mantener un historial de cambios del padrón (altas, bajas, modificaciones) con fecha y usuario responsable. |
@@ -15,6 +15,10 @@
 | RF-09 | Cobertura y reportes | El sistema debe generar reportes de cobertura, comparando beneficiarios registrados frente a la población estimada por zona. |
 | RF-10 | Cobertura y reportes | El sistema debe permitir exportar el padrón depurado en Excel/PDF. |
 | RF-11 | Depuración de datos (Staging) | El sistema debe contar con un módulo temporal de importación para validar, limpiar y estructurar los datos históricos de Excel antes de consolidarlos en la base de datos principal. |
+
+### Criterio de identificación y detección de duplicados
+
+El DNI identifica a la persona, no a una inscripción única para todos los programas. Una persona puede tener inscripciones en programas distintos si cumple las reglas de elegibilidad correspondientes. Para evitar doble asignación dentro de un mismo programa, una inscripción activa existente en otro comité debe generar una alerta y quedar sujeta a revisión de la Sub Gerencia; no se debe crear ni rechazar automáticamente esa nueva inscripción sin aplicar la decisión de revisión. La inscripción repetida en el mismo programa y comité debe bloquearse como duplicado.
 
 ## Requisitos adicionales propuestos por el equipo
 
