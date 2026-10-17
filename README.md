@@ -7,7 +7,7 @@
 
 Sistema web centralizado diseñado para digitalizar y gestionar el padrón de beneficiarios del **Programa del Vaso de Leche** y los **Comedores Populares** de la Municipalidad Provincial de Huamanga.
 
-Este proyecto busca eliminar la duplicidad de beneficiarios, depurar los padrones históricos y ofrecer una visibilidad real de la cobertura mediante mapas y reportes, asegurando que los recursos lleguen a quienes realmente los necesitan.
+Este proyecto busca prevenir duplicidades de inscripción dentro de cada programa social, depurar los padrones históricos y ofrecer visibilidad de la cobertura mediante mapas y reportes. El DNI identifica a la persona, mientras que cada inscripción se evalúa según el programa y comité correspondientes; una coincidencia en otro programa no implica automáticamente una duplicidad.
 
 ---
 ## Curso
@@ -19,7 +19,7 @@ Chipana Nuñez, Ever Neils
 
 
 ## 🎯 Objetivos del Sistema
-* **Padrón Único:** Evitar que una misma persona cobre doble ración en distintos comités.
+* **Padrón depurado:** Detectar posibles inscripciones duplicadas dentro de un mismo programa, revisar los casos entre comités y permitir inscripciones en programas distintos cuando las reglas de elegibilidad lo permitan.
 * **Depuración (Staging):** Limpiar los datos históricos provenientes de Excel/papel antes de consolidarlos.
 * **Cobertura Real:** Mostrar mapas y reportes de beneficiarios activos por zonas.
 * **Accesibilidad:** Proveer una interfaz (PWA) para dirigentes de zonas rurales con baja conectividad.
