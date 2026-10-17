@@ -1,116 +1,182 @@
-# Enfoque arquitectónico
+@'
+# Enfoque arquitectónico: Arquitectura Limpia (Clean Architecture)
 
 **Proyecto:** Sistema de Gestión de Programas Sociales – Huamanga
+**Curso:** Arquitectura de Software (IS-488) – Semestre 2026-II
+**Integrantes:** Cárdenas García, Yery May · Chipana Nuñez, Ever Neils
 
 ## 1. Definición del enfoque
 
-El **estilo** (capas) define cómo se separan las responsabilidades. El **enfoque** define cómo se aplica ese estilo al construir el sistema.
+El **estilo** (arquitectura en capas, monolito) define cómo se separan las responsabilidades. El **enfoque** define cómo se organiza el código dentro de esas capas.
 
-> **Enfoque adoptado: monolito modular, API-first, guiado por drivers arquitectónicos.**
+> **Enfoque adoptado: Arquitectura Limpia (Clean Architecture), aplicada a un monolito modular con API REST.**
 
-| Componente del enfoque | Qué significa |
+La Arquitectura Limpia organiza el sistema en círculos concéntricos. El centro contiene las reglas del negocio, y las tecnologías (base de datos, web, servicios externos) quedan en el borde. Su regla central es:
+
+> **Regla de dependencia:** las dependencias del código fuente solo apuntan hacia adentro. Una capa interna nunca conoce a una capa externa.
+
+| Componente del enfoque | Qué significa en este proyecto |
 |---|---|
-| Monolito modular | Una sola aplicación desplegable, organizada internamente en módulos independientes por responsabilidad del negocio. |
-| API-first | La API REST se diseña primero y es el único contrato entre presentación y negocio. |
-| Guiado por drivers | Cada decisión se justifica con un driver del análisis (integridad, seguridad, trazabilidad, usabilidad, mantenibilidad). |
-| Integraciones aisladas | Los servicios externos se acceden mediante adaptadores, no directamente desde la lógica. |
+| Dominio en el centro | Las reglas del padrón (unicidad del beneficiario, elegibilidad) no dependen de ninguna tecnología. |
+| Casos de uso | Cada acción del sistema (registrar beneficiario, inscribir, registrar entrega) es una clase independiente y probable. |
+| Puertos y adaptadores | Los casos de uso definen interfaces (puertos); la base de datos y los servicios externos las implementan (adaptadores). |
+| Independencia tecnológica | Se puede cambiar el framework, la base de datos o la interfaz sin tocar las reglas del negocio. |
+| Testabilidad | Los casos de uso se prueban sin base de datos ni servidor web. |
 
-## 2. Principios
+## 2. Las cuatro capas
+
+| Capa (de adentro hacia afuera) | Responsabilidad | Contenido en el proyecto |
+|---|---|---|
+| 1. Entidades (dominio) | Reglas del negocio puras y de mayor estabilidad. | Beneficiario, Programa, Inscripción, Entrega, Usuario, DocumentoIdentidad. |
+| 2. Casos de uso (aplicación) | Reglas propias de la aplicación; orquestan las entidades. Definen los puertos. | RegistrarBeneficiario, InscribirEnPrograma, RegistrarEntrega, GenerarReporte, AutenticarUsuario. |
+| 3. Adaptadores de interfaz | Convierten datos entre el formato de los casos de uso y el de las tecnologías. | Controladores REST, presentadores (DTO/JSON), implementación de repositorios, adaptadores de servicios externos. |
+| 4. Frameworks y drivers | Detalles tecnológicos intercambiables. | Framework web, base de datos relacional, aplicación web (UI), servicios externos de identidad. |
+
+## 3. Diagrama de capas y regla de dependencia
+
+```mermaid
+flowchart TB
+    subgraph L4["4. FRAMEWORKS Y DRIVERS"]
+        UI["Aplicación web"]
+        BD[("Base de datos relacional")]
+        EXT["Servicios externos: identidad y clasificación socioeconómica"]
+
+        subgraph L3["3. ADAPTADORES DE INTERFAZ"]
+            CTRL["Controladores REST"]
+            REPO["Repositorios (implementación)"]
+            ADAP["Adaptadores de integración"]
+
+            subgraph L2["2. CASOS DE USO"]
+                CU["RegistrarBeneficiario · InscribirEnPrograma · RegistrarEntrega · GenerarReporte · AutenticarUsuario"]
+                PUERTOS["Puertos: BeneficiarioRepositorio · ValidadorIdentidad · RegistroAuditoria"]
+
+                subgraph L1["1. ENTIDADES"]
+                    ENT["Beneficiario · Programa · Inscripción · Entrega · Usuario"]
+                end
+            end
+        end
+    end
+
+    UI --> CTRL
+    CTRL --> CU
+    CU --> ENT
+    CU --> PUERTOS
+    REPO -. "implementa" .-> PUERTOS
+    ADAP -. "implementa" .-> PUERTOS
+    REPO --> BD
+    ADAP --> EXT
+```
+
+Las flechas continuas son dependencias de uso y apuntan hacia adentro. Las líneas punteadas muestran la **inversión de dependencias**: el caso de uso define la interfaz y la infraestructura la implementa.
+
+## 4. Flujo de ejemplo: registrar un beneficiario
+
+```mermaid
+sequenceDiagram
+    actor Op as Operador
+    participant UI as Aplicación web
+    participant C as Controlador REST
+    participant U as Caso de uso RegistrarBeneficiario
+    participant E as Entidad Beneficiario
+    participant R as Repositorio (puerto)
+    participant A as Auditoría (puerto)
+
+    Op->>UI: Completa el formulario
+    UI->>C: POST /beneficiarios
+    C->>U: ejecutar(datos)
+    U->>R: existePorDocumento(dni)
+    R-->>U: false
+    U->>E: crear(datos) y validar reglas
+    E-->>U: beneficiario válido
+    U->>R: guardar(beneficiario)
+    U->>A: registrar(usuario, acción, fecha)
+    U-->>C: resultado
+    C-->>UI: 201 Created (JSON)
+    UI-->>Op: Mensaje de confirmación
+```
+
+## 5. Principios aplicados
 
 | Principio | Aplicación en el proyecto |
 |---|---|
-| Separación de responsabilidades | Cada capa y módulo tiene una única razón de cambio. |
-| Bajo acoplamiento entre módulos | Los módulos se comunican por interfaces del servicio, no accediendo a tablas ajenas. |
-| Seguridad por diseño | Autenticación y autorización obligatorias en toda operación de la API. |
-| Trazabilidad por defecto | Toda modificación del padrón y toda entrega generan un registro de auditoría. |
-| Extensibilidad | Un nuevo programa social se agrega como módulo, sin modificar los existentes. |
+| Regla de dependencia | Dominio y casos de uso no importan nada de web, base de datos ni servicios externos. |
+| Inversión de dependencias | Los casos de uso definen puertos; la infraestructura los implementa. |
+| Responsabilidad única | Cada caso de uso resuelve una sola acción del negocio. |
+| Independencia de frameworks | El framework web es un detalle de la capa externa. |
+| Independencia de la base de datos | El dominio no conoce el motor; el acceso se hace mediante repositorios. |
+| Testabilidad | Los casos de uso se prueban con repositorios simulados (mock). |
+| Seguridad y trazabilidad por diseño | La autorización y la auditoría se invocan desde los casos de uso, no desde la interfaz. |
 
-## 3. Módulos de la capa de negocio
+## 6. Tácticas por driver
 
-| Módulo | Responsabilidad |
-|---|---|
-| Usuarios y seguridad | Registro, autenticación, roles y permisos. |
-| Beneficiarios | Registro y actualización de personas, validación de unicidad. |
-| Programas | Definición de programas (Vaso de Leche, Comedores Populares) y sus reglas de elegibilidad. |
-| Inscripciones | Alta y baja de beneficiarios en cada programa. |
-| Entregas | Registro de raciones o productos entregados por comité o comedor. |
-| Reportes | Consultas y reportes del padrón y de las entregas. |
-| Auditoría | Registro de acciones sobre el padrón y las entregas. |
-
-## 4. Tácticas por driver
+> Los IDs D1 a D8 corresponden a los drivers de `estilo-arquitectonico.md`.
 
 | Driver | Táctica | Dónde se aplica |
 |---|---|---|
-| D1 Integridad del padrón | Restricción de unicidad por documento de identidad; validación previa a registrar. | Beneficiarios, base de datos. |
-| D2 Protección de datos | Autenticación con token, control de acceso por roles (RBAC), cifrado de contraseñas y uso de HTTPS. | Usuarios y seguridad. |
-| D3 Trazabilidad | Registro de auditoría con usuario, fecha y operación. | Auditoría. |
-| D4 Usabilidad | Formularios simples, validaciones claras y mensajes de error comprensibles. | Presentación. |
-| D5 Mantenibilidad | Módulos con límites claros y pruebas por módulo. | Toda la capa de negocio. |
-| D6 Integración | Patrón adaptador con una interfaz por servicio externo; simulación (mock) en el prototipo académico. | Adaptadores de integración. |
-| D8 Disponibilidad | Respaldos periódicos de la base de datos y manejo de fallos de servicios externos. | Datos e integraciones. |
+| D1 Integridad del padrón | Regla de unicidad de documento de identidad en el dominio, reforzada con restricción única en la base de datos. | Entidades, caso de uso RegistrarBeneficiario, repositorio. |
+| D2 Protección de datos | Autenticación con token, control de acceso por roles (RBAC) verificado en cada caso de uso, cifrado de contraseñas y HTTPS. | Casos de uso, controladores. |
+| D3 Trazabilidad | Puerto RegistroAuditoria invocado por todo caso de uso que modifique el padrón o registre una entrega. | Casos de uso, adaptador de auditoría. |
+| D4 Usabilidad | Presentadores que traducen errores del dominio a mensajes claros; formularios simples. | Adaptadores de interfaz, UI. |
+| D5 Mantenibilidad | Un programa social nuevo agrega entidades y casos de uso sin modificar los existentes. | Dominio y casos de uso. |
+| D6 Integración | Puerto ValidadorIdentidad con un adaptador por servicio; versión simulada (mock) en el prototipo. | Casos de uso, adaptadores de integración. |
+| D7 Equipo pequeño y restricciones | Un único despliegue (monolito modular) con una API REST como contrato con la UI. | Todo el sistema. |
+| D8 Disponibilidad | Respaldos de la base de datos y manejo de fallos de los servicios externos dentro de los adaptadores. | Frameworks y drivers, adaptadores. |
 
-## 5. Decisiones arquitectónicas
+## 7. Decisiones arquitectónicas
 
 | ID | Decisión | Justificación |
 |---|---|---|
-| ADR-01 | Estilo en capas (3 capas). | Simplicidad y coherencia con los drivers (ver `estilo-arquitectonico.md`). |
-| ADR-02 | Monolito modular. | Equipo de 2 personas, carga moderada, transacciones simples. |
-| ADR-03 | API REST con formato JSON. | Restricción del proyecto y desacople entre presentación y negocio. |
-| ADR-04 | Autenticación por token y roles. | Protección de datos personales y control de acceso por perfil. |
-| ADR-05 | Base de datos relacional. | Integridad referencial y restricciones de unicidad del padrón. |
-| ADR-06 | Tabla de auditoría. | Trazabilidad de cambios y entregas. |
-| ADR-07 | Adaptadores para sistemas externos. | Aislar cambios en servicios de terceros. |
+| ADR-01 | Estilo en capas como monolito. | Simplicidad y coherencia con los drivers (ver `estilo-arquitectonico.md`). |
+| ADR-02 | Arquitectura Limpia como enfoque de organización interna. | Protege las reglas del padrón de cambios tecnológicos y facilita las pruebas. |
+| ADR-03 | Casos de uso como unidad de la capa de aplicación. | Cada funcionalidad queda aislada, trazable a una historia de usuario y probable. |
+| ADR-04 | Repositorios y servicios externos detrás de puertos. | Permite cambiar la base de datos o el proveedor sin tocar el negocio. |
+| ADR-05 | API REST con formato JSON. | Restricción del proyecto y desacople entre UI y aplicación. |
+| ADR-06 | Autenticación por token y roles. | Protección de datos personales y control de acceso por perfil. |
+| ADR-07 | Base de datos relacional. | Integridad referencial y restricciones de unicidad del padrón. |
+| ADR-08 | Auditoría como puerto del caso de uso. | Trazabilidad garantizada en todas las operaciones sensibles. |
 
-## 6. Estructura de código propuesta
+## 8. Estructura de código propuesta
 
 ```
 programas-sociales/
-├── frontend/              # Capa de presentación
+├── frontend/                          # 4. Frameworks y drivers (UI)
 └── backend/
-    ├── api/               # Controladores REST
-    ├── modules/
-    │   ├── usuarios/
-    │   ├── beneficiarios/
-    │   ├── programas/
-    │   ├── inscripciones/
-    │   ├── entregas/
-    │   ├── reportes/
-    │   └── auditoria/
-    ├── integraciones/     # Adaptadores a sistemas externos
-    └── datos/             # Acceso a la base de datos
+    ├── dominio/                       # 1. Entidades
+    │   ├── beneficiario/
+    │   ├── programa/
+    │   ├── inscripcion/
+    │   ├── entrega/
+    │   └── usuario/
+    ├── aplicacion/                    # 2. Casos de uso
+    │   ├── casos-de-uso/
+    │   │   ├── registrar-beneficiario
+    │   │   ├── inscribir-en-programa
+    │   │   ├── registrar-entrega
+    │   │   ├── generar-reporte
+    │   │   └── autenticar-usuario
+    │   └── puertos/                   # Interfaces (repositorios, validador, auditoría)
+    ├── adaptadores/                   # 3. Adaptadores de interfaz
+    │   ├── entrada/                   # Controladores REST y presentadores
+    │   └── salida/                    # Repositorios, integraciones, auditoría
+    └── infraestructura/               # 4. Frameworks y drivers
+        ├── web/                       # Configuración del servidor
+        └── base-de-datos/             # Conexión y migraciones
 ```
 
-## 7. Diagrama de módulos
+## 9. Consecuencias
 
-```mermaid
-flowchart LR
-    Web["Aplicación web"] -->|"API REST"| API["Controladores"]
+**Ventajas**
+- Las reglas del padrón no dependen de ninguna tecnología.
+- Fácil de probar: los casos de uso se ejecutan sin base de datos ni servidor.
+- Se puede cambiar de base de datos, de framework o de proveedor externo con impacto acotado.
+- Cada caso de uso se vincula con una historia de usuario.
 
-    subgraph MONO["MONOLITO MODULAR"]
-        API --> Seg["Usuarios y seguridad"]
-        API --> Ben["Beneficiarios"]
-        API --> Prog["Programas"]
-        API --> Insc["Inscripciones"]
-        API --> Ent["Entregas"]
-        API --> Rep["Reportes"]
-        Ben -.-> Aud["Auditoría"]
-        Insc -.-> Aud
-        Ent -.-> Aud
-        Adap["Adaptadores de integración"]
-    end
+**Desventajas y mitigación**
 
-    Ben --> BD[("Base de datos")]
-    Insc --> BD
-    Ent --> BD
-    Aud --> BD
-    Ben --> Adap
-    Adap --> Ext["Servicios externos"]
-```
-
-## 8. Riesgos y evolución
-
-| Riesgo | Respuesta |
+| Desventaja | Mitigación |
 |---|---|
-| Los módulos se acoplan con el tiempo. | Revisiones de código y límites explícitos por módulo. |
-| Crecimiento de usuarios o programas. | Replicar la aplicación; si un módulo lo exige, extraerlo como servicio independiente. |
-| Cambios en servicios externos. | Los adaptadores confinan el impacto a una sola pieza. |
+| Más archivos e interfaces que una arquitectura en capas simple. | Crear puertos solo para dependencias reales (base de datos, identidad, auditoría). |
+| Curva de aprendizaje para el equipo. | Empezar con un caso de uso completo (RegistrarBeneficiario) y usarlo como plantilla. |
+| Riesgo de transformar datos en exceso entre capas. | Usar DTO únicamente en los límites (controladores y repositorios). |
+| Los módulos pueden acoplarse con el tiempo. | Revisar que las importaciones respeten la regla de dependencia. |
+'@ | Set-Content -Path arquitectura/enfoque-arquitectonico.md -Encoding utf8

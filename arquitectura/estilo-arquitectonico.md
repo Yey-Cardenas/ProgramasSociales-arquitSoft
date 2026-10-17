@@ -1,4 +1,4 @@
-# Estilo arquitectónico
+﻿# Estilo arquitectónico
 
 **Proyecto:** Sistema de Gestión de Programas Sociales – Huamanga
 **Curso:** Arquitectura de Software (IS-488) – Semestre 2026-II
@@ -58,7 +58,7 @@ Es la continuación de la arquitectura inicial del Entregable 02.
 | Lógica de negocio | Reglas del dominio, validaciones, seguridad y auditoría. | Módulos de beneficiarios, programas, inscripciones, entregas, usuarios y reportes. |
 | Datos | Persistencia de la información. | Base de datos relacional. |
 
-**Regla de dependencia:** cada capa solo se comunica con la inmediata inferior. La presentación nunca accede directamente a la base de datos.
+**Regla de dependencia:** la presentación nunca accede directamente a la base de datos. La organización interna de la capa de negocio sigue el enfoque de Arquitectura Limpia, descrito en `enfoque-arquitectonico.md`.
 
 ## 6. Diagrama
 
@@ -109,3 +109,4 @@ flowchart TD
 | Escalar implica escalar todo el sistema. | La carga es moderada; se puede replicar la aplicación si crece. |
 | Riesgo de acoplamiento entre módulos. | Organizar el código por módulos con límites claros (ver enfoque arquitectónico). |
 | Un fallo puede afectar a todo el sistema. | Respaldos periódicos y manejo de errores en las integraciones. |
+
