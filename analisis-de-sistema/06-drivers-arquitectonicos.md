@@ -1,5 +1,7 @@
 # Drivers arquitectónicos
 
+Los drivers se derivan de los requisitos funcionales, restricciones y atributos de calidad. Los criterios verificables asociados a RNF-01–RNF-09 se encuentran en [07-requisitos-no-funcionales.md](07-requisitos-no-funcionales.md), y su relación con los escenarios AC01–AC09 se documenta en [04-atributos-de-calidad.md](04-atributos-de-calidad.md).
+
 ## Drivers identificados
 
 | ID | Driver arquitectónico | Origen | ¿Por qué influye en la arquitectura? |
