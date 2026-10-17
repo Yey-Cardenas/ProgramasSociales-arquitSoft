@@ -2,36 +2,42 @@
 
 ## Escenario general
 
-Un dirigente de comité registra a varios beneficiarios en una zona con baja cobertura de internet. Al recuperar la conexión, su aplicativo sincroniza los datos y el sistema debe validar los DNI contra todo el padrón municipal, mientras el personal de la Sub Gerencia consulta el mapa de cobertura. Los datos son personales y sensibles, y el sistema opera durante todo el año.
+Un dirigente de comité registra a varios beneficiarios en una zona con baja cobertura de internet. Al recuperar la conexión, la PWA sincroniza los registros pendientes y el servidor valida el DNI y las reglas de negocio. El personal de la Sub Gerencia consulta la cobertura. Los datos personales deben protegerse durante el uso, la sincronización, la auditoría y los respaldos.
+
+Los criterios cuantitativos y su método de verificación se detallan en [07-requisitos-no-funcionales.md](07-requisitos-no-funcionales.md). Los valores que aún requieren acuerdo municipal se consideran objetivos propuestos, no resultados ya demostrados.
 
 ## Escenarios de calidad
 
 | ID | Atributo de calidad | Escenario de calidad | Origen |
-|----|---------------------|----------------------|--------|
-| AC01 | **Disponibilidad y operación offline** | El servicio debe estar disponible al menos el 99% del tiempo. Cuando no haya conexión, la PWA debe guardar localmente los registros pendientes y sincronizarlos al recuperar la red, mostrando su estado y evitando altas duplicadas por reintentos. Los conflictos de validación deben quedar identificados para revisión, sin sobrescribir datos automáticamente. | RNF-01 |
-| AC02 | **Rendimiento** | La validación de duplicados por DNI debe completarse en menos de 0.5 segundos. | RNF-02 |
-| AC03 | **Usabilidad** | El registro de un beneficiario debe completarse con un máximo de 5 campos obligatorios, pensando en dirigentes con poca experiencia tecnológica. | RNF-03 |
-| AC04 | **Seguridad y privacidad** | Los datos personales (DNI, dirección) deben estar protegidos mediante cifrado y accesos restringidos por rol. | RNF-04 |
-| AC05 | **Compatibilidad** | El aplicativo del dirigente debe funcionar en celulares de gama baja (Android 8+) y en navegador web, usando tecnologías PWA. | RNF-05 |
-| AC06 | **Auditabilidad** | Toda modificación al padrón debe registrarse con usuario, fecha y motivo del cambio. | RNF-06 |
-| AC07 | **Escalabilidad** | El sistema debe soportar al menos 15,000 beneficiarios sin degradar el rendimiento. | RNF-07 |
-| AC08 | **Mantenibilidad** | La arquitectura debe permitir agregar nuevos tipos de programas sociales sin rediseñar el sistema. | RNF-08 |
-| AC09 | **Respaldo de información** | El sistema debe generar copias de seguridad diarias de la base de datos. | RNF-09 |
+|---|---|---|---|
+| AC01 | **Disponibilidad y operación offline** | La aplicación en servidor tendrá una disponibilidad mensual objetivo de al menos 99 %. Sin conexión, la PWA conservará los registros pendientes y mostrará su estado. Solo se considerarán confirmados cuando el servidor los acepte; los reintentos no deben generar altas duplicadas y los conflictos se enviarán a revisión sin sobrescritura automática. | RNF-01 |
+| AC02 | **Rendimiento** | Con 15 000 personas en el conjunto de prueba, la validación de DNI deberá responder en menos de 500 ms en el percentil 95, bajo condiciones de prueba documentadas. | RNF-02 |
+| AC03 | **Usabilidad** | El registro tendrá como máximo cinco campos obligatorios si el equipo municipal confirma que estos permiten cumplir las reglas de cada programa. Los errores deben orientar la corrección sin borrar la información ingresada. | RNF-03 |
+| AC04 | **Seguridad y privacidad** | Las comunicaciones usarán HTTPS; las funciones y datos estarán restringidos por roles. Los datos personales locales y los respaldos tendrán medidas de protección apropiadas y se evitará el almacenamiento local innecesario. | RNF-04 |
+| AC05 | **Compatibilidad** | La aplicación se verificará en una matriz acordada de dispositivos Android 8 o superior, navegadores móviles y navegador de escritorio. Las capacidades offline se probarán explícitamente en los entornos soportados. | RNF-05 |
+| AC06 | **Auditabilidad** | Cada alta, modificación, baja lógica o decisión de revisión del padrón registrará como mínimo usuario, fecha y hora, operación y motivo. El historial estará protegido y limitado a roles autorizados. | RNF-06 |
+| AC07 | **Capacidad y escalabilidad** | La solución soportará al menos 15 000 beneficiarios. Como objetivo inicial pendiente de validación, las consultas habituales tendrán percentil 95 inferior a 2 segundos con 20 usuarios concurrentes, excluyendo exportaciones y mapas pesados. | RNF-07 |
+| AC08 | **Mantenibilidad** | Incorporar un programa social nuevo no debe requerir duplicar módulos transversales ni rediseñar la arquitectura; el impacto sobre componentes compartidos deberá documentarse. | RNF-08 |
+| AC09 | **Respaldo de información** | La base de datos tendrá respaldos diarios. Se propone inicialmente una retención de 30 días y pruebas trimestrales de restauración, pendientes de validación operativa. | RNF-09 |
 
 ## Escenarios con formato estímulo – respuesta – medida
 
 ### AC02 – Rendimiento
 
 | Elemento | Descripción |
-|----------|-------------|
-| **Estímulo** | Un dirigente ingresa el DNI de un nuevo beneficiario para registrarlo. |
-| **Respuesta** | El sistema busca el DNI en todo el padrón municipal e informa si ya existe en otro comité. |
-| **Medida** | La respuesta se entrega en menos de 0.5 segundos con 15,000 beneficiarios registrados. |
+|---|---|
+| **Estímulo** | Un usuario ingresa el DNI de una persona para iniciar una inscripción. |
+| **Respuesta** | El servidor valida el DNI y aplica las reglas de inscripción por programa y comité, consultando el padrón pertinente. |
+| **Medida** | Con 15 000 personas y condiciones de carga documentadas, la respuesta de validación será inferior a 500 ms en el percentil 95. Se registrarán hardware, concurrencia, volumen y herramienta de medición. |
 
-### AC01 – Disponibilidad
+### AC01 – Disponibilidad y operación offline
 
 | Elemento | Descripción |
-|----------|-------------|
+|---|---|
 | **Estímulo** | Un dirigente registra beneficiarios en una zona sin conexión a internet. |
-| **Respuesta** | La PWA guarda cada registro pendiente en el dispositivo con un identificador único de operación. Al recuperar la conexión, intenta sincronizarlo con el servidor; el servidor valida el DNI y las reglas de negocio. Los reintentos no deben crear registros repetidos. Si el servidor detecta un duplicado o conflicto, el registro queda marcado para revisión y no reemplaza datos existentes. El usuario puede consultar si el registro está pendiente, sincronizado o requiere revisión. |
-| **Medida** | En pruebas de desconexión y reconexión, los registros guardados localmente permanecen pendientes hasta recibir confirmación del servidor; los reintentos no generan altas duplicadas; los conflictos quedan visibles para revisión y no se sobrescriben datos. La disponibilidad del servicio se mide por separado y debe alcanzar al menos el 99% del tiempo. |
+| **Respuesta** | La PWA conserva cada registro pendiente con un identificador único de operación. Al recuperar conexión, lo envía al servidor, que valida DNI y reglas de negocio. Los reintentos son idempotentes; los conflictos quedan marcados para revisión y no reemplazan datos existentes. |
+| **Medida** | En pruebas de desconexión, reconexión y reintento, ningún registro se mostrará como confirmado antes de la aceptación del servidor, no se crearán altas repetidas y los conflictos permanecerán visibles. La disponibilidad mensual del servicio se medirá por separado, con objetivo de al menos 99 %. |
+
+## Criterio de interpretación
+
+Estos escenarios definen objetivos que deben verificarse mediante pruebas o revisión arquitectónica. Los números propuestos —disponibilidad, tiempos de respuesta, concurrencia y retención— deben confirmarse con la Municipalidad y el equipo técnico antes de considerarse compromisos definitivos. No existe evidencia de cumplimiento mientras no se disponga de implementación y resultados de prueba.
