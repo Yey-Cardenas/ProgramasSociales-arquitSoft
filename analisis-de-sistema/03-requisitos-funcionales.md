@@ -9,7 +9,7 @@
 | RF-03 | Gestión de inscripciones | El sistema debe permitir registrar una novedad que pueda afectar la elegibilidad y gestionar el estado de una inscripción específica, conservando la identidad de la persona y sus otras inscripciones. La baja o no revalidación debe seguir el procedimiento aprobado y quedar auditada; no se debe desactivar automáticamente a la persona en todos los programas. |
 | RF-04 | Detección y resolución de duplicados | El sistema debe generar una alerta cuando una inscripción activa en otro comité del mismo programa pueda representar una duplicidad. Solo personal autorizado de la Sub Gerencia podrá resolverla, registrando uno de estos resultados: no es duplicado, duplicado confirmado, requiere información adicional o derivado para decisión superior. Mientras esté pendiente, no se confirmará la nueva inscripción en conflicto. |
 | RF-05 | Auditoría del padrón y duplicados | El sistema debe mantener un historial de altas, modificaciones, bajas lógicas, decisiones sobre alertas, revalidaciones, importaciones, exportaciones y cambios de permisos, registrando usuario, fecha/hora del servidor, operación, registro afectado, resultado y motivo cuando corresponda. Los eventos no podrán editarse ni borrarse por usuarios ordinarios; las correcciones se registrarán como nuevos eventos vinculados al anterior. |
-| RF-06 | Revalidación periódica | El sistema debe generar una tarea de revalidación cada 6 meses por inscripción, notificar al comité asignado y registrar estados y resultados. La falta de respuesta o el vencimiento no deben causar una baja automática; los casos pendientes se recordarán o escalarán según plazos aprobados por la Municipalidad. |
+| RF-06 | Revalidación periódica | El sistema debe generar una tarea de revalidación cada 6 meses por inscripción, notificar al comité asignado y registrar estados, responsables, fechas, motivos y resultados. Los estados propuestos son pendiente, en verificación, requiere subsanación, derivada a Sub Gerencia, revalidada y no revalidada por decisión autorizada. La falta de respuesta o el vencimiento no causan una baja automática: la tarea permanece pendiente y se recuerda o escala según plazos aprobados por la Municipalidad. |
 | RF-07 | Notificaciones | El sistema debe crear avisos de aprobación y revalidación cuando exista un contacto válido y el canal esté habilitado. Debe registrar canal, fecha/hora, estado del proveedor y su identificador de mensaje cuando exista; distinguir enviado de entregado; reintentar fallos temporales de forma limitada y marcar fallos permanentes para revisión. El mensaje no debe exponer datos personales innecesarios y el fallo del proveedor no debe revertir una inscripción confirmada. |
 | RF-08 | Cobertura y reportes | El sistema debe mostrar un mapa con la cantidad de beneficiarios activos por zona o distrito. |
 | RF-09 | Cobertura y reportes | El sistema debe generar reportes de cobertura, comparando beneficiarios registrados frente a la población estimada por zona. |
@@ -118,4 +118,20 @@ Los permisos exactos, campos exportables, retención de archivos y responsables 
 - **Datos sensibles:** no guardar contraseñas, tokens, contenido completo de archivos exportados ni datos personales innecesarios en eventos o logs técnicos.
 
 Criterios de verificación: comprobar que un usuario sin permiso no pueda consultar auditoría; que un usuario de negocio no pueda editar ni eliminar eventos; que las correcciones generen un nuevo evento; y que las modificaciones administrativas relevantes queden registradas. Estas medidas están documentadas como requisitos pendientes de implementación y pruebas.
+
+
+
+## Procedimiento propuesto para la revalidación semestral
+
+Este flujo es una propuesta para revisión del área usuaria; los plazos, evidencias exigidas y autoridad final deben aprobarse formalmente por la Municipalidad antes de considerarse política vigente.
+
+1. **Generación de tarea:** el sistema crea una tarea por cada inscripción cuando se aproxima la fecha semestral de revisión. La tarea identifica la inscripción, el programa, el comité responsable y la fecha límite aprobada.
+2. **Aviso y verificación inicial:** se notifica al dirigente asignado y, si existe un canal válido, se envía un aviso al beneficiario sin incluir información personal innecesaria. El dirigente verifica los datos con los criterios y evidencias aprobados para ese programa.
+3. **Estados de trabajo propuestos:** *Pendiente*, *En verificación*, *Requiere subsanación*, *Derivada a Sub Gerencia*, *Revalidada* y *No revalidada por decisión autorizada*. El estado final debe ser por inscripción, no global para la persona.
+4. **Datos incompletos o dudosos:** el dirigente registra el motivo y deriva el caso a la Sub Gerencia. No puede confirmar por sí solo una no revalidación si el procedimiento municipal reserva esa decisión al personal autorizado.
+5. **Sin respuesta:** el sistema mantiene la tarea pendiente, envía recordatorios en los plazos que se aprueben y la escala al responsable designado al vencer el plazo. El silencio o el vencimiento no desactivan automáticamente la inscripción ni afectan otras inscripciones de la persona.
+6. **Decisión final:** el personal autorizado revisa la evidencia, registra el resultado, el motivo, la fecha y el responsable. Si se decide no revalidar, se aplica únicamente a esa inscripción y conforme al procedimiento formal aprobado.
+7. **Auditoría y notificación:** se conserva el historial de estados, responsables, fechas, motivos y decisiones. Se registra por separado el estado de las notificaciones; un fallo de SMS/WhatsApp no cambia la decisión ni el estado de la inscripción.
+
+**Criterios mínimos de aceptación:** la tarea se genera por inscripción; la falta de respuesta deja el caso pendiente o escalado; los cambios y decisiones quedan auditados; solo el rol autorizado registra la decisión final; y ninguna inscripción de otro programa se modifica automáticamente.
 
