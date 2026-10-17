@@ -274,3 +274,31 @@ Si la validación falla, el lote queda en revisión y el padrón definitivo no c
 - Se puede demostrar el vencimiento y la eliminación de los archivos temporales según el plazo aprobado.
 
 Los límites, formatos admitidos, retención y regla de aprobación por dos personas para cargas masivas requieren decisión municipal. Estos controles son requisitos de diseño pendientes de implementación y pruebas.
+
+
+## Fuente, actualización y validación de datos de cobertura geográfica
+
+### Fuentes de datos propuestas
+- **Límites y códigos territoriales:** priorizar cartografía y códigos oficiales facilitados o validados por la Municipalidad Provincial de Huamanga y la entidad pública competente. Registrar la fuente, versión y fecha de vigencia.
+- **Población de referencia:** utilizar publicaciones oficiales del INEI (censo, estimaciones o proyecciones disponibles para la unidad territorial y periodo que correspondan), siempre que la desagregación sea compatible con el reporte. La cifra debe identificarse como población de referencia/estimada, no como número de beneficiarios elegibles.
+- **Datos municipales:** si se emplean padrones o delimitaciones municipales, registrar el área responsable, fecha de corte y metodología. No mezclar cifras de años o unidades territoriales distintos sin advertirlo.
+
+### Metadatos y actualización
+Cada conjunto importado debe conservar: institución fuente, nombre del conjunto, fecha de publicación o versión, fecha de descarga/recepción, año de referencia, unidad geográfica, responsable de validación y observaciones. La Sub Gerencia o el área municipal que designe la Municipalidad será responsable de aprobar su uso. Como propuesta operativa, revisar la disponibilidad de nuevos datos al menos una vez al año y actualizar antes si la fuente oficial publica una versión pertinente; la periodicidad definitiva debe aprobarse municipalmente.
+
+### Cálculo y presentación
+- Mostrar por separado la cantidad de beneficiarios activos del sistema y la población de referencia, indicando el periodo de cada cifra.
+- Calcular cobertura porcentual solo cuando numerador y denominador correspondan a la misma zona y exista una definición municipal aprobada de la población de referencia. Mostrar fórmula, fecha de corte y fuente.
+- Si faltan datos, la unidad territorial no coincide o la fuente está desactualizada, mostrar “sin dato comparable” y no inventar ni estimar silenciosamente un porcentaje.
+- No interpretar población total como población elegible para un programa. Si se requiere cobertura de población objetivo, la fuente y definición de población objetivo deben aprobarse por la Municipalidad.
+- Las correcciones y actualizaciones deben conservar el historial de la fuente y del valor reemplazado.
+
+### Criterios de aceptación
+1. Cada mapa/reporte identifica fuente, año de referencia y fecha de corte de los datos usados.
+2. Las zonas usan códigos y límites de una fuente aprobada; no se mezclan límites incompatibles.
+3. El porcentaje se calcula solo con unidades y periodos comparables y con una definición de denominador aprobada.
+4. La falta de información se presenta como tal, sin crear cifras.
+5. La actualización deja trazabilidad de quién la validó, cuándo y qué versión se incorporó.
+6. Los cambios en límites o códigos territoriales se revisan antes de asociarles padrones históricos.
+
+La selección final de conjuntos de datos, denominador de cobertura, responsable y periodicidad requiere aprobación municipal. Estas reglas son requisitos documentados pendientes de implementar y probar.

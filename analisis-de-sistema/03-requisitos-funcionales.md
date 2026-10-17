@@ -11,8 +11,8 @@
 | RF-05 | Auditoría del padrón y duplicados | El sistema debe mantener un historial de altas, modificaciones, bajas lógicas, decisiones sobre alertas, revalidaciones, importaciones, exportaciones y cambios de permisos, registrando usuario, fecha/hora del servidor, operación, registro afectado, resultado y motivo cuando corresponda. Los eventos no podrán editarse ni borrarse por usuarios ordinarios; las correcciones se registrarán como nuevos eventos vinculados al anterior. |
 | RF-06 | Revalidación periódica | El sistema debe generar una tarea de revalidación cada 6 meses por inscripción, notificar al comité asignado y registrar estados, responsables, fechas, motivos y resultados. Los estados propuestos son pendiente, en verificación, requiere subsanación, derivada a Sub Gerencia, revalidada y no revalidada por decisión autorizada. La falta de respuesta o el vencimiento no causan una baja automática: la tarea permanece pendiente y se recuerda o escala según plazos aprobados por la Municipalidad. |
 | RF-07 | Notificaciones | El sistema debe crear avisos de aprobación y revalidación cuando exista un contacto válido y el canal esté habilitado. Debe registrar canal, fecha/hora, estado del proveedor y su identificador de mensaje cuando exista; distinguir enviado de entregado; reintentar fallos temporales de forma limitada y marcar fallos permanentes para revisión. El mensaje no debe exponer datos personales innecesarios y el fallo del proveedor no debe revertir una inscripción confirmada. |
-| RF-08 | Cobertura y reportes | El sistema debe mostrar un mapa con la cantidad de beneficiarios activos por zona o distrito. |
-| RF-09 | Cobertura y reportes | El sistema debe generar reportes de cobertura, comparando beneficiarios registrados frente a la población estimada por zona. |
+| RF-08 | Cobertura y reportes | El sistema debe mostrar un mapa con beneficiarios activos por zona o distrito, identificando la fuente y fecha de corte de la delimitación territorial utilizada. |
+| RF-09 | Cobertura y reportes | El sistema debe generar reportes que presenten por separado los beneficiarios activos y la población de referencia por zona. Solo calculará porcentajes cuando la unidad territorial, el periodo y la definición del denominador sean comparables y estén aprobados; mostrará fuente, año de referencia y fecha de corte. |
 | RF-10 | Exportación segura de padrones y reportes | El sistema debe permitir exportar reportes autorizados en Excel/PDF, validar permisos en el servidor según rol y ámbito de comité, limitar los campos al mínimo necesario y registrar usuario, fecha/hora, formato, filtros o ámbito, cantidad de registros y resultado. El DNI completo no se incluirá por defecto en reportes generales; exportaciones completas o excepcionales requerirán permiso específico. |
 | RF-11 | Importación y depuración (Staging) | El sistema debe importar formatos autorizados Excel/CSV a un lote temporal sin modificar directamente el padrón definitivo; validar estructura, campos y límites; identificar errores, incompletos y posibles duplicados; y gestionar estados explícitos del lote. Solo un usuario autorizado puede aprobar y consolidar. La consolidación debe ser transaccional e idempotente, auditable y acompañada de un resumen de filas aceptadas, rechazadas y pendientes. Los reportes de error deben neutralizar valores que puedan interpretarse como fórmulas. |
 
@@ -168,3 +168,31 @@ Si la validación falla, el lote queda en revisión y el padrón definitivo no c
 - Se puede demostrar el vencimiento y la eliminación de los archivos temporales según el plazo aprobado.
 
 Los límites, formatos admitidos, retención y regla de aprobación por dos personas para cargas masivas requieren decisión municipal. Estos controles son requisitos de diseño pendientes de implementación y pruebas.
+
+
+## Fuente, actualización y validación de datos de cobertura geográfica
+
+### Fuentes de datos propuestas
+- **Límites y códigos territoriales:** priorizar cartografía y códigos oficiales facilitados o validados por la Municipalidad Provincial de Huamanga y la entidad pública competente. Registrar la fuente, versión y fecha de vigencia.
+- **Población de referencia:** utilizar publicaciones oficiales del INEI (censo, estimaciones o proyecciones disponibles para la unidad territorial y periodo que correspondan), siempre que la desagregación sea compatible con el reporte. La cifra debe identificarse como población de referencia/estimada, no como número de beneficiarios elegibles.
+- **Datos municipales:** si se emplean padrones o delimitaciones municipales, registrar el área responsable, fecha de corte y metodología. No mezclar cifras de años o unidades territoriales distintos sin advertirlo.
+
+### Metadatos y actualización
+Cada conjunto importado debe conservar: institución fuente, nombre del conjunto, fecha de publicación o versión, fecha de descarga/recepción, año de referencia, unidad geográfica, responsable de validación y observaciones. La Sub Gerencia o el área municipal que designe la Municipalidad será responsable de aprobar su uso. Como propuesta operativa, revisar la disponibilidad de nuevos datos al menos una vez al año y actualizar antes si la fuente oficial publica una versión pertinente; la periodicidad definitiva debe aprobarse municipalmente.
+
+### Cálculo y presentación
+- Mostrar por separado la cantidad de beneficiarios activos del sistema y la población de referencia, indicando el periodo de cada cifra.
+- Calcular cobertura porcentual solo cuando numerador y denominador correspondan a la misma zona y exista una definición municipal aprobada de la población de referencia. Mostrar fórmula, fecha de corte y fuente.
+- Si faltan datos, la unidad territorial no coincide o la fuente está desactualizada, mostrar “sin dato comparable” y no inventar ni estimar silenciosamente un porcentaje.
+- No interpretar población total como población elegible para un programa. Si se requiere cobertura de población objetivo, la fuente y definición de población objetivo deben aprobarse por la Municipalidad.
+- Las correcciones y actualizaciones deben conservar el historial de la fuente y del valor reemplazado.
+
+### Criterios de aceptación
+1. Cada mapa/reporte identifica fuente, año de referencia y fecha de corte de los datos usados.
+2. Las zonas usan códigos y límites de una fuente aprobada; no se mezclan límites incompatibles.
+3. El porcentaje se calcula solo con unidades y periodos comparables y con una definición de denominador aprobada.
+4. La falta de información se presenta como tal, sin crear cifras.
+5. La actualización deja trazabilidad de quién la validó, cuándo y qué versión se incorporó.
+6. Los cambios en límites o códigos territoriales se revisan antes de asociarles padrones históricos.
+
+La selección final de conjuntos de datos, denominador de cobertura, responsable y periodicidad requiere aprobación municipal. Estas reglas son requisitos documentados pendientes de implementar y probar.
