@@ -7,7 +7,7 @@
 
 El sistema utilizará el patrón **Modelo-Vista-Controlador (MVC)** implementado con **C# y ASP.NET Core 9 MVC**, conforme al stack tecnológico establecido en el `README.md`. La aplicación se desplegará como un **monolito modular**: un único sistema organizado en módulos y capas con responsabilidades definidas.
 
-La presentación se implementará con vistas Razor (`.cshtml`), el acceso a datos se realizará mediante Entity Framework Core 9 y la persistencia se gestionará en Microsoft SQL Server. No se plantea un frontend independiente en React ni un backend separado con Node.js/Express.
+La presentación se implementará con vistas Razor (`.cshtml`), el acceso a datos se realizará mediante Entity Framework Core 9 y la persistencia se gestionará en Azure SQL Database. No se plantea un frontend independiente en React ni un backend separado con Node.js/Express.
 
 ## 2. Componentes del patrón MVC
 
@@ -46,7 +46,7 @@ sequenceDiagram
 | Controladores | Recibir solicitudes HTTP y coordinar el flujo de la aplicación. | ASP.NET Core MVC 9. |
 | Servicios de negocio | Aplicar reglas del padrón, validar duplicados, gestionar staging, reportes y notificaciones. | C# sobre .NET 9. |
 | Persistencia | Consultar y guardar información con control de integridad. | Entity Framework Core 9. |
-| Base de datos | Almacenar beneficiarios, programas, comités, inscripciones y registros de auditoría. | Microsoft SQL Server. |
+| Base de datos | Almacenar beneficiarios, programas, comités, inscripciones y registros de auditoría. | Azure SQL Database. |
 | Integraciones externas | Enviar notificaciones por SMS/WhatsApp cuando corresponda. | Servicio de integración encapsulado en la capa de negocio. |
 
 ## 5. Reglas de dependencia
@@ -73,7 +73,7 @@ sequenceDiagram
 
 ## 7. Base de datos y persistencia
 
-La base de datos definida para el proyecto es **Microsoft SQL Server**. La aplicación accederá a ella mediante **Entity Framework Core 9**, utilizando el enfoque Code-First indicado en el README. El nombre concreto de la base de datos debe configurarse en el entorno de ejecución y no debe asumirse como definitivo solo por aparecer en un diagrama.
+El servicio de base de datos definido para el despliegue recomendado es **Azure SQL Database**. La aplicación accederá a ella mediante **Entity Framework Core 9**, utilizando el enfoque Code-First indicado en el README. El nombre concreto de la base de datos debe configurarse en el entorno de ejecución y no debe asumirse como definitivo solo por aparecer en un diagrama.
 
 Las reglas de integridad, las validaciones de negocio y las transacciones deberán prevenir registros inconsistentes. Los datos importados mediante staging se validarán antes de consolidarse en el padrón principal.
 
@@ -83,7 +83,7 @@ Las reglas de integridad, las validaciones de negocio y las transacciones deber�
 - Las capacidades PWA y el soporte offline se implementarán dentro de la aplicación web ASP.NET Core MVC; no implican desarrollar un frontend independiente.
 - La sincronización offline utilizará registros pendientes identificados de forma única, reintentos idempotentes y validación final del lado servidor. Los estados y conflictos se mostrarán al usuario; los conflictos no producirán sobrescrituras automáticas. La persistencia local debe limitar los datos personales y excluirlos de la caché de recursos estáticos.
 - Las notificaciones SMS/WhatsApp dependen de la disponibilidad y configuración de un proveedor externo.
-- El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 9 MVC, Razor, Entity Framework Core 9 y Microsoft SQL Server**.
+- El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 9 MVC, Razor, Entity Framework Core 9 y Azure SQL Database**.
 
 ## 9. Justificación
 

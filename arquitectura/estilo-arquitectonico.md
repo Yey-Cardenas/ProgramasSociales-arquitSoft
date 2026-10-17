@@ -39,11 +39,11 @@ El sistema centraliza el padrón de beneficiarios del Programa del Vaso de Leche
 
 Se adopta una **arquitectura en capas implementada como monolito modular**, utilizando el patrón **MVC (Modelo-Vista-Controlador) de ASP.NET Core 9**.
 
-La elección reduce la complejidad de desarrollo y despliegue, facilita las transacciones sobre el padrón y permite mantener los módulos organizados con responsabilidades claras. Esta decisión sigue el stack definido en el `README.md`: C#, ASP.NET Core 9 MVC, vistas Razor, Entity Framework Core 9 y Microsoft SQL Server.
+La elección reduce la complejidad de desarrollo y despliegue, facilita las transacciones sobre el padrón y permite mantener los módulos organizados con responsabilidades claras. Esta decisión sigue el stack definido en el `README.md`: C#, ASP.NET Core 9 MVC, vistas Razor, Entity Framework Core 9 y Azure SQL Database.
 
 | Driver | Justificación |
 |---|---|
-| D1 | La persistencia centralizada permite aplicar validaciones y restricciones de integridad en SQL Server. |
+| D1 | La persistencia centralizada en Azure SQL Database permite aplicar validaciones y restricciones de integridad. |
 | D2, D3 | Las reglas de seguridad y auditoría se gestionan en la aplicación y se aplican de forma consistente. |
 | D4 | Las vistas Razor permiten construir formularios y pantallas integradas con ASP.NET Core MVC. |
 | D5 | Los módulos del dominio se organizan de forma cohesionada dentro de una única aplicación desplegable. |
@@ -56,7 +56,7 @@ La elección reduce la complejidad de desarrollo y despliegue, facilita las tran
 |---|---|---|
 | Presentación | Mostrar formularios, vistas y resultados; recibir las interacciones del usuario. | ASP.NET Core MVC, vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap; capacidades PWA según el alcance definido. |
 | Lógica de negocio | Aplicar reglas, validar beneficiarios, controlar duplicados, gestionar staging, reportes y notificaciones. | C# y servicios de aplicación en ASP.NET Core 9; inyección de dependencias. |
-| Acceso a datos | Consultar y persistir la información, manteniendo integridad transaccional. | Entity Framework Core 9, patrones Repository y Unit of Work cuando correspondan, Microsoft SQL Server. |
+| Acceso a datos | Consultar y persistir la información, manteniendo integridad transaccional. | Entity Framework Core 9, patrones Repository y Unit of Work cuando correspondan, Azure SQL Database. |
 
 **Regla de dependencia:** las vistas no acceden directamente a la base de datos. Los controladores coordinan las peticiones y delegan las reglas a los servicios; el acceso a datos se realiza mediante la capa correspondiente.
 
@@ -88,7 +88,7 @@ Las integraciones con servicios externos se realizarán desde servicios de la ap
 
 **Ventajas**
 - Menor complejidad y costo de desarrollo y despliegue.
-- Integridad de datos mediante transacciones y restricciones de SQL Server.
+- Integridad de datos mediante transacciones y restricciones de Azure SQL Database.
 - Separación de responsabilidades y facilidad de mantenimiento.
 - Integración de vistas, controladores y lógica en el stack ASP.NET Core MVC.
 
@@ -102,7 +102,7 @@ Las integraciones con servicios externos se realizarán desde servicios de la ap
 
 ## 8. Recomendación de despliegue en la nube
 
-Se recomienda la opción A: alojar la aplicación ASP.NET Core 9 MVC en **Azure App Service** y mantener la base de datos en un recurso administrado separado. La primera alternativa a evaluar para datos es **Azure SQL Database**, por su administración de infraestructura, mantenimiento y respaldos. Esta separación es de despliegue y operación; la solución sigue siendo un monolito modular, no una arquitectura de microservicios.
+Se recomienda la opción A: alojar la aplicación ASP.NET Core 9 MVC en **Azure App Service** y mantener la base de datos en un recurso administrado separado. Se define **Azure SQL Database** como servicio de base de datos recomendado, por su administración de infraestructura, mantenimiento y respaldos. Esta separación es de despliegue y operación; la solución sigue siendo un monolito modular, no una arquitectura de microservicios.
 
 Criterios para el despliegue:
 
@@ -111,7 +111,7 @@ Criterios para el despliegue:
 - Activar HTTPS, control de acceso por roles, monitoreo y respaldos; verificar la restauración de una copia.
 - Revisar costos de App Service, base de datos, almacenamiento, monitoreo y red antes de elegir los planes.
 - Probar las migraciones de EF Core 9 y todas las consultas con datos de prueba antes de migrar la base de datos.
-- Confirmar que Azure SQL Database soporte todas las funciones necesarias. Si el sistema requiere características exclusivas de SQL Server instalado, elegir una opción de alojamiento compatible en lugar de asumir equivalencia total.
+- Confirmar mediante pruebas que Azure SQL Database soporte todas las funciones necesarias. Si se requiere una característica no disponible en este servicio, documentar y aprobar una alternativa antes de modificar la decisión.
 
 Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero debe documentarse cualquier reducción de seguridad. La configuración de producción debe aplicar restricciones de red y protección de datos desde el inicio.
 
@@ -120,7 +120,7 @@ Para una demostración académica se puede empezar con niveles económicos y dat
 - **Backend y framework web:** C# con ASP.NET Core 9 MVC.
 - **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
 - **Persistencia / ORM:** Entity Framework Core 9, con enfoque Code-First según el diseño.
-- **Base de datos:** Microsoft SQL Server.
+- **Base de datos:** Azure SQL Database.
 - **Arquitectura:** monolito modular organizado en capas, con patrón MVC.
 - **PWA:** capacidades web progresivas y soporte offline dentro de los límites definidos para la aplicación.
 

@@ -18,7 +18,7 @@ Los criterios cuantitativos y su método de verificación se detallan en [07-req
 | AC06 | **Auditabilidad** | Cada alta, modificación, baja lógica o decisión de revisión del padrón registrará como mínimo usuario, fecha y hora, operación y motivo. El historial estará protegido y limitado a roles autorizados. | RNF-06 |
 | AC07 | **Capacidad y escalabilidad** | La solución soportará al menos 15 000 beneficiarios. Como objetivo inicial pendiente de validación, las consultas habituales tendrán percentil 95 inferior a 2 segundos con 20 usuarios concurrentes, excluyendo exportaciones y mapas pesados. | RNF-07 |
 | AC08 | **Mantenibilidad** | Incorporar un programa social nuevo no debe requerir duplicar módulos transversales ni rediseñar la arquitectura; el impacto sobre componentes compartidos deberá documentarse. | RNF-08 |
-| AC09 | **Respaldo de información** | La base de datos tendrá respaldos diarios. Se propone inicialmente una retención de 30 días y pruebas trimestrales de restauración, pendientes de validación operativa. | RNF-09 |
+| AC09 | **Respaldo de información** | Azure SQL Database tendrá respaldos diarios. Se propone inicialmente una retención de 30 días y pruebas trimestrales de restauración, pendientes de validación operativa. | RNF-09 |
 
 ## Escenarios con formato estímulo – respuesta – medida
 

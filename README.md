@@ -2,7 +2,7 @@
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-MVC-blue?style=flat-square&logo=windows)
-![SQL Server](https://img.shields.io/badge/SQL_Server-Microsoft_SQL_Server-CC292B?style=flat-square&logo=microsoftsqlserver)
+![Azure SQL Database](https://img.shields.io/badge/Azure_SQL_Database-Azure-0078D4?style=flat-square&logo=microsoftazure)
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito_Modular-success?style=flat-square)
 
 Sistema web centralizado diseñado para digitalizar y gestionar el padrón de beneficiarios del **Programa del Vaso de Leche** y los **Comedores Populares** de la Municipalidad Provincial de Huamanga.
@@ -33,12 +33,12 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 ## 💻 Stack tecnológico
 - **Backend:** C# con ASP.NET Core 9.
 - **Presentación:** Vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap; capacidades PWA.
-- **Base de datos:** Microsoft SQL Server.
+- **Base de datos:** Azure SQL Database (servicio administrado relacional compatible con el ecosistema SQL Server).
 - **ORM:** Entity Framework Core 9.
 
 ## ☁️ Despliegue recomendado
 
-Se propone la opción A: **Azure App Service** para alojar la aplicación ASP.NET Core 9 MVC y un servicio de base de datos administrado separado. **Azure SQL Database** es la primera alternativa por evaluar, previa verificación de compatibilidad con las consultas y migraciones de Entity Framework Core 9. La base de datos debe restringirse para que solo la aplicación pueda conectarse, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se deben estimar los costos mensuales y probar respaldos y restauración. Esta recomendación es de diseño; el repositorio todavía no contiene una aplicación desplegada.
+Se define la opción A como despliegue recomendado: **Azure App Service** para alojar la aplicación ASP.NET Core 9 MVC y **Azure SQL Database** como servicio administrado de base de datos separado. Antes de una implementación real se comprobará la compatibilidad de las consultas, tipos de datos, migraciones de Entity Framework Core 9 y demás funcionalidades necesarias. El acceso a la base de datos se restringirá a la aplicación, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se estimarán los costos mensuales y se probarán los respaldos y la restauración. Esta es una decisión de diseño documentada; el repositorio todavía no contiene una aplicación desplegada.
 
 ## 📚 Documentación del repositorio
 

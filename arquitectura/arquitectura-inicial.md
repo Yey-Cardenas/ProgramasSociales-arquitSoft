@@ -2,7 +2,7 @@
 
 ## 1. Stack tecnológico de referencia
 
-Esta arquitectura se define de acuerdo con el `README.md` del repositorio. La aplicación será un **monolito modular** desarrollado con **C# y ASP.NET Core 9 MVC**, con vistas Razor (`.cshtml`), **Entity Framework Core 9** y **Microsoft SQL Server**.
+Esta arquitectura se define de acuerdo con el `README.md` del repositorio. La aplicación será un **monolito modular** desarrollado con **C# y ASP.NET Core 9 MVC**, con vistas Razor (`.cshtml`), **Entity Framework Core 9** y **Azure SQL Database**.
 
 La interfaz se renderiza mediante Razor dentro de ASP.NET Core MVC; no se plantea un frontend independiente en React ni un backend separado con Node.js/Express. Las capacidades PWA y el soporte offline se incorporarán a la aplicación web dentro del alcance del proyecto.
 
@@ -48,7 +48,7 @@ flowchart TD
 
 - **Presentación:** permite la interacción mediante vistas Razor (`.cshtml`) con HTML5, CSS3 y Bootstrap. La interfaz será adaptable a distintos dispositivos y podrá incorporar capacidades PWA para apoyar el trabajo en zonas con conectividad limitada. Los controladores MVC reciben las peticiones HTTP.
 - **Lógica de negocio:** contiene servicios en C# para autenticación y autorización, registro, staging, validación de duplicados, revalidación, cobertura, reportes y notificaciones.
-- **Acceso a datos:** utiliza Entity Framework Core 9 para consultar y persistir la información en Microsoft SQL Server. Los patrones Repository y Unit of Work se aplicarán cuando aporten una separación clara de responsabilidades y control transaccional.
+- **Acceso a datos:** utiliza Entity Framework Core 9 para consultar y persistir la información en Azure SQL Database. Los patrones Repository y Unit of Work se aplicarán cuando aporten una separación clara de responsabilidades y control transaccional.
 
 La solución se despliega como un único sistema organizado en módulos cohesionados. La separación por capas es lógica y no implica desplegar un frontend y un backend como aplicaciones independientes.
 
@@ -76,7 +76,7 @@ La solución se despliega como un único sistema organizado en módulos cohesion
 ## 6. Justificaciones de diseño
 
 - **Staging separado del padrón:** los archivos históricos de Excel o CSV pueden contener errores y duplicados. El staging permite validar y limpiar esos datos antes de consolidarlos en el padrón principal.
-- **Persistencia transaccional:** Entity Framework Core 9 junto con SQL Server permite coordinar operaciones relacionadas y mantener la integridad de la información.
+- **Persistencia transaccional:** Entity Framework Core 9 junto con Azure SQL Database permite coordinar operaciones relacionadas y mantener la integridad de la información.
 - **Monolito modular:** una aplicación desplegable con módulos bien delimitados reduce la complejidad operativa para el tamaño y alcance del proyecto.
 - **PWA:** las capacidades web progresivas pueden ayudar a los usuarios en zonas con conectividad limitada. Para los registros offline, se mantendrán estados visibles (pendiente, sincronizando, sincronizado o requiere revisión/error), reintentos con espera progresiva ante fallos temporales y validación final en el servidor. Los registros locales no se considerarán confirmados hasta recibir respuesta del servidor. La aplicación no sobrescribirá automáticamente datos ante conflictos. Se debe limitar la información personal almacenada localmente y evitar incluir datos sensibles en la caché de recursos estáticos.
 
@@ -103,8 +103,8 @@ Los documentos de arquitectura deben mantener como referencia común el siguient
 - **Patrón web:** ASP.NET Core MVC.
 - **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
 - **ORM:** Entity Framework Core 9.
-- **Base de datos:** Microsoft SQL Server.
+- **Base de datos:** Azure SQL Database.
 - **Estilo de despliegue:** monolito modular organizado en capas.
 - **PWA:** capacidades progresivas/offline dentro del alcance acordado.
 
-React, Node.js, Express, Prisma y PostgreSQL no forman parte del stack aprobado en el `README.md`, salvo que el equipo acuerde formalmente una modificación y actualice toda la documentación relacionada.
+React, Node.js, Express, Prisma y PostgreSQL no forman parte del stack elegido. Los diagramas existentes se conservan sin cambios, según la instrucción del proyecto; las etiquetas de base de datos que aparecen en ellos son representaciones conceptuales y no sustituyen la decisión de despliegue recomendada: Azure SQL Database.
