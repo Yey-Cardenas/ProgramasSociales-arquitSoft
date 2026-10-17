@@ -33,6 +33,17 @@ Antes de aprobar estos requisitos, el equipo debe confirmar con la Municipalidad
 7. El costo mensual de App Service, base de datos, almacenamiento, monitoreo y conectividad privada, antes de contratar los recursos.
 8. La compatibilidad de Azure SQL Database con las consultas, tipos de datos, migraciones de EF Core 10 y demás funcionalidades requeridas por la aplicación.
 
+## Criterios de verificación de Azure SQL Database
+
+Antes de considerar lista la persistencia, el equipo deberá verificar en un entorno de prueba de Azure SQL Database que:
+- Las migraciones Code-First de EF Core 10 se generan y aplican correctamente.
+- Las consultas y operaciones del padrón producen resultados correctos y respetan las reglas de integridad.
+- Los índices, restricciones y transacciones requeridos son compatibles con el servicio.
+- Las consultas críticas cumplen los objetivos de rendimiento propuestos en RNF-02 y RNF-07 bajo condiciones de prueba documentadas.
+- Las credenciales se mantienen fuera del repositorio y el acceso de red a la base de datos está restringido.
+
+Estos criterios están pendientes de ejecución porque el repositorio aún no incluye el código de la aplicación ni migraciones.
+
 ## Trazabilidad
 
 | Requisito no funcional | Escenario de calidad | Driver arquitectónico relacionado |

@@ -41,3 +41,8 @@ Los criterios cuantitativos y su método de verificación se detallan en [07-req
 ## Criterio de interpretación
 
 Estos escenarios definen objetivos que deben verificarse mediante pruebas o revisión arquitectónica. Los números propuestos —disponibilidad, tiempos de respuesta, concurrencia y retención— deben confirmarse con la Municipalidad y el equipo técnico antes de considerarse compromisos definitivos. No existe evidencia de cumplimiento mientras no se disponga de implementación y resultados de prueba.
+
+
+## Verificación de la persistencia
+
+La solución propuesta utiliza Azure SQL Database con Entity Framework Core 10 y el proveedor Microsoft.EntityFrameworkCore.SqlServer. La compatibilidad se validará mediante pruebas de migraciones, integridad y rendimiento en un entorno de Azure SQL Database. Esta comprobación queda pendiente hasta contar con código y migraciones; no se considera un resultado ya demostrado.

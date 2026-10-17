@@ -15,6 +15,10 @@ Los drivers se derivan de los requisitos funcionales, restricciones y atributos 
 | DA07 | Los padrones históricos en Excel/papel deben depurarse antes de consolidarse. | RF-11 – Staging | Obliga a disponer de un módulo de staging separado del padrón definitivo, con validación de formato, detección de duplicados, registro de errores y revisión antes de consolidar datos. |
 | DA08 | La cobertura debe visualizarse geográficamente por zona. | RF-08, RF-09; RC05 – Azure SQL Database | Condiciona el modelado de zonas, distritos y datos geográficos necesarios para agrupar y presentar beneficiarios activos. La persistencia se realizará en Azure SQL Database mediante Entity Framework Core 10, de acuerdo con el stack aprobado en el README. La fuente de límites geográficos y población estimada debe definirse con datos municipales u otra fuente validada. No se requiere introducir PostgreSQL ni PostGIS como parte de la arquitectura actual. |
 
+## Compatibilidad de persistencia
+
+La decisión de usar Azure SQL Database se implementará mediante Entity Framework Core 10 y su proveedor para SQL Server (Microsoft.EntityFrameworkCore.SqlServer). La compatibilidad deberá comprobarse en una base de datos de prueba de Azure SQL Database mediante pruebas de migraciones, consultas LINQ, índices, restricciones, transacciones y cualquier función específica que se requiera. No se considera verificada hasta que existan código, migraciones y resultados de pruebas. Las decisiones de persistencia no autorizan cambiar el motor seleccionado sin documentar y aprobar la alternativa.
+
 ## Evaluación de otros elementos
 
 | Elemento | ¿Puede ser driver? | Justificación |

@@ -80,6 +80,10 @@ La solución se despliega como un único sistema organizado en módulos cohesion
 - **Monolito modular:** una aplicación desplegable con módulos bien delimitados reduce la complejidad operativa para el tamaño y alcance del proyecto.
 - **PWA:** las capacidades web progresivas pueden ayudar a los usuarios en zonas con conectividad limitada. Para los registros offline, se mantendrán estados visibles (pendiente, sincronizando, sincronizado o requiere revisión/error), reintentos con espera progresiva ante fallos temporales y validación final en el servidor. Los registros locales no se considerarán confirmados hasta recibir respuesta del servidor. La aplicación no sobrescribirá automáticamente datos ante conflictos. Se debe limitar la información personal almacenada localmente y evitar incluir datos sensibles en la caché de recursos estáticos.
 
+## Criterios de compatibilidad de la base de datos
+
+La persistencia objetivo es Azure SQL Database, accedida mediante Entity Framework Core 10 y el proveedor Microsoft.EntityFrameworkCore.SqlServer. Antes de desplegar se deberán probar las migraciones Code-First y las consultas en un entorno de prueba de Azure SQL Database, incluyendo tipos de datos, índices, restricciones, transacciones y reglas de integridad. No se debe asumir que todas las funciones de SQL Server autoadministrado están disponibles de forma idéntica en Azure SQL Database. Las credenciales no deben guardarse en GitHub. Estas comprobaciones siguen pendientes hasta que se incorpore la implementación.
+
 ## 7. Vista de contexto
 
 ```mermaid

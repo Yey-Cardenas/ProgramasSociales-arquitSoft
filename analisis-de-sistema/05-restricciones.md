@@ -8,7 +8,7 @@
 | RC02 | Aplicación web / PWA | La aplicación debe desarrollarse con **ASP.NET Core MVC 10** y vistas Razor (`.cshtml`). Debe ofrecer una interfaz web adaptable y capacidades PWA para apoyar el trabajo en zonas con conectividad limitada. |
 | RC03 | Comunicación web e integraciones | La interacción principal entre el navegador y el servidor seguirá el flujo de peticiones HTTP de ASP.NET Core MVC. Cuando una integración lo requiera, el sistema podrá consumir o exponer endpoints HTTP/API, sin imponer una arquitectura de frontend independiente. |
 | RC04 | Tecnología de backend | El backend debe desarrollarse en **C# con ASP.NET Core 10**, siguiendo el patrón Modelo-Vista-Controlador (MVC). El acceso a datos se realizará mediante **Entity Framework Core 10**. |
-| RC05 | Base de datos | La base de datos objetivo para el despliegue recomendado es **Azure SQL Database**. El acceso y la persistencia se gestionarán mediante Entity Framework Core 10 y un enfoque Code-First, después de comprobar la compatibilidad de las migraciones y funcionalidades requeridas. |
+| RC05 | Base de datos | La base de datos objetivo para el despliegue recomendado es **Azure SQL Database**. El acceso se realizará mediante el proveedor Microsoft.EntityFrameworkCore.SqlServer de Entity Framework Core 10 y un enfoque Code-First. Antes de producción se probarán las migraciones contra Azure SQL Database y se comprobará la compatibilidad de consultas, tipos de datos, restricciones, transacciones y funciones requeridas. |
 | RC06 | Gateway de mensajería | El sistema debe integrarse con un gateway externo de SMS/WhatsApp para notificar a los beneficiarios. La integración se realizará desde la capa de servicios, sin acoplarla a las vistas. |
 | RC07 | Infraestructura y nube | Se recomienda desplegar la aplicación ASP.NET Core 10 MVC en Azure App Service y utilizar **Azure SQL Database** como servicio administrado de base de datos separado. En producción, la base de datos no debe tener acceso público irrestricto; se limitará la conectividad a la aplicación, preferentemente mediante conectividad privada si el plan y el presupuesto lo permiten. En desarrollo, cualquier acceso temporal mediante IP pública deberá limitarse por firewall, utilizar credenciales seguras y retirarse al terminar las pruebas; no se considerará una configuración de producción. |
 | RC08 | Dispositivos | La interfaz debe funcionar en navegadores web modernos y adaptarse a celulares, incluidos dispositivos Android 8 o superior, en la medida permitida por el navegador y las capacidades PWA utilizadas. |
@@ -22,6 +22,15 @@
 | RC11 | Legal | Protección de datos personales | El sistema maneja datos personales, como DNI y dirección; su tratamiento debe respetar la normativa peruana de protección de datos personales (Ley N.° 29733). |
 | RC12 | Organizacional | Presupuesto municipal limitado | La solución debe mantener bajos los costos de infraestructura y operación, evitando una arquitectura distribuida innecesariamente compleja. |
 | RC13 | Organizacional | Usuarios con poca experiencia | Los dirigentes de comité tienen poca experiencia con tecnología, por lo que se requiere una interfaz simple, instrucciones claras y capacitación básica. |
+
+## Criterios de compatibilidad con Azure SQL Database
+
+- La selección de Azure SQL Database no equivale a asumir compatibilidad automática con todas las funciones de una instalación autoadministrada de SQL Server.
+- Se utilizará el proveedor de EF Core para SQL Server, con versiones compatibles con .NET 10 y EF Core 10.
+- Las migraciones deberán revisarse y ejecutarse primero en un entorno de prueba de Azure SQL Database.
+- No se incorporarán procedimientos almacenados, funciones específicas, tipos especiales ni dependencias de herramientas hasta confirmar que están soportados y que son necesarios.
+- Las credenciales y cadenas de conexión se guardarán en configuración segura, fuera del control de versiones.
+- La verificación queda pendiente de la implementación, ya que el repositorio contiene documentación y no código ni migraciones ejecutables.
 
 ## Criterio de consistencia tecnológica
 

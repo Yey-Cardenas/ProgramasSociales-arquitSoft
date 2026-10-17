@@ -115,6 +115,10 @@ Criterios para el despliegue:
 
 Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero debe documentarse cualquier reducción de seguridad. La configuración de producción debe aplicar restricciones de red y protección de datos desde el inicio.
 
+## Criterios de persistencia y compatibilidad
+
+Azure SQL Database será el servicio de base de datos administrado y Entity Framework Core 10 utilizará el proveedor Microsoft.EntityFrameworkCore.SqlServer. Antes de producción, el equipo debe validar las migraciones Code-First, las consultas LINQ, los tipos de datos, las restricciones de integridad, las transacciones y las funciones SQL requeridas directamente en Azure SQL Database. No se debe asumir que todas las características de SQL Server autoadministrado están disponibles de forma idéntica en el servicio. Las pruebas quedan pendientes hasta que exista una implementación.
+
 ## 9. Stack tecnológico de referencia
 
 - **Backend y framework web:** C# con ASP.NET Core 10 MVC.
