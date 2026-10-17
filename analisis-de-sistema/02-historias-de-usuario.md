@@ -21,4 +21,4 @@ Formato: **Como [actor], quiero [acción], para [beneficio].**
 | ID | Historia de usuario | Actor | Justificación |
 |----|---------------------|-------|---------------|
 | HU10 | Como dirigente de comité o personal de la Sub Gerencia, quiero iniciar sesión con mis credenciales según mi rol, para acceder solo a la información que me corresponde. | Dirigente / Personal de la Sub Gerencia | La propuesta incluye un módulo de Autenticación y exige accesos restringidos por rol para proteger datos sensibles. |
-| HU11 | Como dirigente de comité, quiero registrar beneficiarios sin conexión a internet y que se sincronicen después, para trabajar en zonas con baja cobertura. | Dirigente de Comité | La propuesta exige una PWA con operación offline-first. |
+| HU11 | Como dirigente de comité, quiero registrar beneficiarios sin conexión y consultar el estado de su sincronización, para trabajar en zonas con baja cobertura sin perder información ni generar altas duplicadas. | Dirigente de Comité | La PWA debe conservar los registros pendientes, sincronizarlos al recuperar la conexión, mostrar fallos o conflictos para revisión y permitir reintentos sin duplicar operaciones. |
