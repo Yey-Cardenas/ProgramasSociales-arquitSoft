@@ -1,6 +1,12 @@
 # Arquitectura inicial del sistema
 
-## Diagrama de arquitectura
+## 1. Stack tecnológico de referencia
+
+Esta arquitectura se define de acuerdo con el `README.md` del repositorio. La aplicación será un **monolito modular** desarrollado con **C# y ASP.NET Core 9 MVC**, con vistas Razor (`.cshtml`), **Entity Framework Core 9** y **Microsoft SQL Server**.
+
+La interfaz se renderiza mediante Razor dentro de ASP.NET Core MVC; no se plantea un frontend independiente en React ni un backend separado con Node.js/Express. Las capacidades PWA y el soporte offline se incorporarán a la aplicación web dentro del alcance del proyecto.
+
+## 2. Diagrama de arquitectura
 
 ```mermaid
 flowchart TD
@@ -10,20 +16,20 @@ flowchart TD
         Beneficiario["Beneficiario"]
     end
 
-    subgraph PRESENTACION["CAPA MVC - WEB"]
-        Vistas["Vistas Razor (.cshtml)<br/>+ PWA Offline-first"]
-        Controladores["Controladores<br/>ASP.NET Core MVC 9"]
+    subgraph PRESENTACION["PRESENTACIÓN - ASP.NET CORE MVC 9"]
+        Vistas["Vistas Razor (.cshtml)<br/>HTML, CSS, Bootstrap<br/>Capacidades PWA"]
+        Controladores["Controladores MVC"]
     end
 
-    subgraph NEGOCIO["LÓGICA Y DATOS (INFRASTRUCTURA)"]
-        Servicios["Servicios de Negocio<br/>(Validación, Staging, Notificaciones)"]
-        UoW["Unit of Work & Repositories<br/>EF Core"]
+    subgraph NEGOCIO["LÓGICA DE NEGOCIO"]
+        Servicios["Servicios en C#<br/>Validación, Staging, Notificaciones"]
     end
 
-    subgraph DATOS["BASE DE DATOS"]
-        BD[("SQL Server<br/>(AuditoriaDB)")]
+    subgraph DATOS["ACCESO A DATOS"]
+        Persistencia["Entity Framework Core 9<br/>Repository / Unit of Work cuando corresponda"]
+        BD[("Microsoft SQL Server<br/>(AuditoriaDB, nombre por configurar)")]
     end
-    
+
     subgraph EXTERNOS["SISTEMAS EXTERNOS"]
         Gateway["Gateway SMS / WhatsApp"]
     end
@@ -32,60 +38,72 @@ flowchart TD
     SubGerencia --> Vistas
     Vistas --> Controladores
     Controladores --> Servicios
-    Servicios --> UoW
-    UoW --> BD
-    Servicios -->|"integraciones"| Gateway
-    Gateway -.->|"notifica estado"| Beneficiario
+    Servicios --> Persistencia
+    Persistencia --> BD
+    Servicios -->|"Integración HTTP cuando corresponda"| Gateway
+    Gateway -.->|"Notificación"| Beneficiario
 ```
 
+## 3. Descripción de las capas
 
-## Descripción
+- **Presentación:** permite la interacción mediante vistas Razor (`.cshtml`) con HTML5, CSS3 y Bootstrap. La interfaz será adaptable a distintos dispositivos y podrá incorporar capacidades PWA para apoyar el trabajo en zonas con conectividad limitada. Los controladores MVC reciben las peticiones HTTP.
+- **Lógica de negocio:** contiene servicios en C# para autenticación y autorización, registro, staging, validación de duplicados, revalidación, cobertura, reportes y notificaciones.
+- **Acceso a datos:** utiliza Entity Framework Core 9 para consultar y persistir la información en Microsoft SQL Server. Los patrones Repository y Unit of Work se aplicarán cuando aporten una separación clara de responsabilidades y control transaccional.
 
-La arquitectura inicial se organiza en tres capas lógicas siguiendo el patrón MVC sobre ASP.NET Core 9:
+La solución se despliega como un único sistema organizado en módulos cohesionados. La separación por capas es lógica y no implica desplegar un frontend y un backend como aplicaciones independientes.
 
--   **Presentación (Capa MVC - Web):** Permite la interacción de los usuarios mediante Vistas Razor (`.cshtml`). Para los dirigentes en zonas de baja conectividad, las vistas incorporan capacidades de PWA (Progressive Web App) para soporte offline-first. Los Controladores orquestan las peticiones HTTP.
--   **Lógica de Negocio (Servicios):** Contiene las clases de servicio responsables de las funcionalidades core: autenticación, registro, staging, validación de duplicados, revalidación, cobertura y notificaciones. Todo desarrollado en C#.
--   **Datos (Infraestructura):** Almacena y consulta la información utilizando Entity Framework Core junto con los patrones Unit of Work y Repository, apuntando a una base de datos SQL Server (`AuditoriaDB`).
+## 4. Asignación de requisitos a módulos
 
-Además, la capa de negocio se integra con sistemas externos: el servicio de **Notificaciones** con el **gateway SMS/WhatsApp** y el servicio de **Staging** con la carga inicial desde el **padrón histórico** de cada comité.
-
-## Asignación de requisitos a módulos (Servicios MVC)
-
-| Módulo (Servicio) | Requisitos | Responsabilidad |
+| Módulo | Requisitos | Responsabilidad |
 | :--- | :--- | :--- |
-| Autenticación | RF-12, RF-13, RNF-04 | Valida credenciales de dirigentes y personal municipal mediante ASP.NET Core Identity y controla accesos por roles. |
-| Registro y Padrón | RF-01, RF-03, RF-05, RF-14 | Registra y actualiza beneficiarios por comité mediante Unit of Work; mantiene el historial de cambios. |
-| Detección de Duplicados | RF-02, RF-04 | Verifica en la base de datos si el DNI ya existe en otro comité y alerta a la Sub Gerencia. |
-| Revalidación Periódica | RF-06 | Controla la lógica para solicitar la revalidación de cada beneficiario cada 6 meses. |
-| Notificaciones | RF-07 | Genera y encola las notificaciones hacia el gateway externo (SMS/WhatsApp). |
-| Cobertura y Reportes | RF-08, RF-09, RF-10 | Ejecuta consultas LINQ complejas para calcular beneficiarios activos por zona y exportar el padrón. |
-| Staging | RF-11 | Limpia, valida y estructura la carga masiva inicial de Excel/CSV antes de consolidarla mediante EF Core. |
+| Autenticación y autorización | RF-12, RF-13, RNF-04 | Validar credenciales y controlar el acceso por roles. ASP.NET Core Identity podrá utilizarse si forma parte de la implementación. |
+| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Registrar y actualizar beneficiarios por comité y conservar el historial de cambios. |
+| Detección de duplicados | RF-02, RF-04 | Comprobar duplicados de DNI según las reglas del sistema y generar alertas para la Sub Gerencia. |
+| Revalidación periódica | RF-06 | Gestionar el proceso de revalidación según la periodicidad definida. |
+| Notificaciones | RF-07 | Gestionar las notificaciones mediante un gateway externo SMS/WhatsApp. |
+| Cobertura y reportes | RF-08, RF-09, RF-10 | Consultar información y generar reportes de beneficiarios activos por zona. |
+| Staging | RF-11 | Importar datos históricos de Excel/CSV, validarlos y limpiarlos antes de incorporarlos al padrón definitivo. |
 
-## Reglas de dependencia
+## 5. Reglas de dependencia
 
--   **Flujo estricto:** Las Vistas (Presentación) interactúan con los Controladores. Los Controladores llaman a los Servicios de Negocio. Los Servicios acceden a Datos a través del Unit of Work. Nunca se accede a la base de datos desde la Vista o el Controlador.
--   **Inyección de Dependencias:** Los servicios de negocio, repositorios y el Unit of Work se configuran mediante el contenedor de Inyección de Dependencias nativo de .NET 9 (`Program.cs`), garantizando el bajo acoplamiento.
--   **Integraciones externas:** Los sistemas externos (SMS/WhatsApp) se consumen mediante `HttpClient` desde la capa de Servicios de Negocio, nunca desde la presentación.
+- **Flujo principal:** las vistas Razor interactúan con los controladores; los controladores delegan las reglas del dominio a los servicios; los servicios acceden a la persistencia mediante Entity Framework Core 9.
+- **Acceso a datos:** las vistas y los controladores no deben consultar directamente la base de datos.
+- **Inyección de dependencias:** los servicios y componentes de persistencia necesarios se registran en el contenedor nativo de ASP.NET Core, configurado desde `Program.cs`.
+- **Integraciones externas:** las comunicaciones con el gateway SMS/WhatsApp se encapsulan en servicios y pueden realizarse mediante `HttpClient`; no se llaman directamente desde las vistas.
+- **Transacciones:** las operaciones que deban mantener la consistencia del padrón se gestionan con transacciones y restricciones apropiadas en SQL Server.
 
-## Justificaciones de diseño
+## 6. Justificaciones de diseño
 
--   **Staging separado del Registro y Padrón (DA07):** Los datos históricos de Excel llegan con errores y duplicados. Si se cargaran directo mediante el DbContext principal, contaminarían el padrón real o lanzarían excepciones de EF Core. El staging permite sanearlos en memoria o en tablas temporales antes de un `SaveChanges()`.
--   **Patrón Unit of Work (DA03):** Se utiliza para garantizar que las operaciones complejas (ej. registrar un beneficiario, inscribirlo a un programa y crear el registro de auditoría) se ejecuten en una única transacción de SQL Server, manteniendo la integridad referencial.
--   **Desarrollo Orientado a Especificaciones (SDD):** Centralizar la lógica en la capa de Servicios facilita la validación de las reglas de negocio (ej. unicidad de DNI) mediante pruebas unitarias, alineándose con la metodología Spec-Driven Development.
+- **Staging separado del padrón:** los archivos históricos de Excel o CSV pueden contener errores y duplicados. El staging permite validar y limpiar esos datos antes de consolidarlos en el padrón principal.
+- **Persistencia transaccional:** Entity Framework Core 9 junto con SQL Server permite coordinar operaciones relacionadas y mantener la integridad de la información.
+- **Monolito modular:** una aplicación desplegable con módulos bien delimitados reduce la complejidad operativa para el tamaño y alcance del proyecto.
+- **PWA:** las capacidades web progresivas pueden ayudar a los usuarios en zonas con conectividad limitada. El comportamiento offline específico deberá definirse y probarse según las operaciones que realmente deban funcionar sin conexión.
 
-- **Staging separado del Registro y Padrón (DA07):** los datos históricos de Excel y papel llegan con errores y duplicados. Si se cargaran directo, contaminarían el padrón real. El staging permite validarlos y limpiarlos antes de consolidarlos.
-- **Base de datos aislada (DA03):** contiene datos personales sensibles. Solo el servidor de aplicaciones puede acceder a ella, lo que reduce la superficie de ataque.
-
-## Vista de contexto
+## 7. Vista de contexto
 
 ```mermaid
 flowchart LR
-    Dirigente(["Dirigente de Comité"]) -->|"registra y actualiza (Vistas Razor)"| SGPS
-    Sub(["Personal de la Sub Gerencia"]) -->|"supervisa, revisa duplicados, reportes"| SGPS
-    SGPS["Sistema de Gestión de<br/>Programas Sociales<br/>(.NET 9 MVC)"]
-    SGPS -->|"consumo API REST"| GW["Gateway SMS / WhatsApp"]
-    GW -.->|"notifica estado"| Benef(["Beneficiario"])
-    Excel["Padrón actual de los comités<br/>Excel / papel"] -->|"carga inicial (staging)"| SGPS
+    Dirigente(["Dirigente de Comité"]) -->|"Registra y actualiza"| SGPS
+    Sub(["Personal de la Sub Gerencia"]) -->|"Supervisa, revisa duplicados y reportes"| SGPS
+    SGPS["Sistema de Gestión de Programas Sociales<br/>C# / ASP.NET Core 9 MVC<br/>Vistas Razor / EF Core 9"]
+    SGPS -->|"Integración de notificaciones cuando corresponda"| GW["Gateway SMS / WhatsApp"]
+    GW -.->|"Notificación"| Benef(["Beneficiario"])
+    Excel["Padrón histórico de comités<br/>Excel / papel"] -->|"Carga inicial mediante staging"| SGPS
+    DB[("Microsoft SQL Server")] --- SGPS
 ```
 
-Esta vista muestra el sistema como una caja negra: solo aparecen sus actores y los sistemas con los que se comunica. El diagrama de arquitectura, en cambio, muestra su estructura interna por capas y módulos.
+Esta vista muestra el sistema y sus actores externos. La estructura interna se detalla en el diagrama por capas anterior.
+
+## 8. Consistencia con el README
+
+Los documentos de arquitectura deben mantener como referencia común el siguiente stack:
+
+- **Backend:** C# con ASP.NET Core 9.
+- **Patrón web:** ASP.NET Core MVC.
+- **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
+- **ORM:** Entity Framework Core 9.
+- **Base de datos:** Microsoft SQL Server.
+- **Estilo de despliegue:** monolito modular organizado en capas.
+- **PWA:** capacidades progresivas/offline dentro del alcance acordado.
+
+React, Node.js, Express, Prisma y PostgreSQL no forman parte del stack aprobado en el `README.md`, salvo que el equipo acuerde formalmente una modificación y actualice toda la documentación relacionada.
