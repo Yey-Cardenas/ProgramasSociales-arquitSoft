@@ -18,7 +18,7 @@ Los RNF complementan los escenarios de atributos de calidad de [04-atributos-de-
 | **RNF-06** | Auditabilidad | Cada alta, modificación, baja lógica o decisión de revisión que afecte al padrón deberá registrar como mínimo usuario responsable, fecha y hora, operación y motivo. El historial estará protegido contra modificación por usuarios ordinarios y será consultable solo por roles autorizados. | Ejecutar operaciones de prueba y comprobar la integridad y permisos de consulta del historial. | AC06 |
 | **RNF-07** | Capacidad y escalabilidad | La solución deberá procesar un padrón de al menos **15 000 beneficiarios** sin superar los umbrales de rendimiento acordados. Como umbral inicial por validar, se propone que el percentil 95 de las consultas habituales del padrón no supere **2 segundos** con 20 usuarios concurrentes, excluyendo exportaciones y generación de mapas pesados. | Prueba de carga con volumen y concurrencia documentados; registrar tiempos, errores y recursos utilizados. | AC07 |
 | **RNF-08** | Mantenibilidad y extensibilidad | Incorporar un nuevo programa social debe poder realizarse mediante un módulo cohesionado y reglas/configuración específicas, sin duplicar los módulos transversales de autenticación, auditoría y acceso a datos ni alterar los programas existentes. La necesidad de cambios en componentes compartidos deberá documentarse en la revisión de diseño. | Revisión arquitectónica y ejercicio de diseño para un programa adicional, con análisis de impacto documentado. | AC08 |
-| **RNF-09** | Respaldo y recuperación | La base de datos deberá respaldarse al menos una vez al día. Como propuesta inicial por validar, conservar los respaldos diarios durante 30 días, almacenarlos en una ubicación con acceso restringido y realizar una prueba de restauración al menos trimestralmente. La persona responsable y los objetivos de recuperación deberán acordarse con la Municipalidad. | Revisar bitácoras de respaldo, permisos, retención y resultados de restauración. | AC09 |
+| **RNF-09** | Respaldo y recuperación | La base de datos deberá respaldarse al menos una vez al día. Como propuesta inicial por validar, conservar los respaldos durante 30 días y realizar pruebas de restauración al menos trimestrales. Se proponen RTO de hasta 8 horas y RPO de hasta 24 horas, pendientes de aprobación municipal y verificación con la configuración contratada de Azure SQL Database. Estos objetivos no constituyen garantías ni se consideran probados hasta realizar ejercicios de recuperación. | Revisar bitácoras de respaldo, permisos, retención, resultados de restauración y evidencia medida de RTO/RPO en pruebas. | AC09 |
 
 ## Decisiones pendientes de validación
 
@@ -120,3 +120,18 @@ La selección del proveedor, consentimiento, límites de reintento y pruebas de 
 - Una reversión posterior identifica los cambios del lote y no sobrescribe cambios posteriores sin revisión.
 
 Los formatos, tamaño máximo, retención y procedimiento final de aprobación deben validarse con la Municipalidad. Estas pruebas están pendientes de la implementación.
+
+
+## Objetivos propuestos de recuperación ante incidentes
+
+Como punto de partida para revisión municipal, se proponen estos objetivos de servicio, sujetos a confirmar con la configuración contratada de Azure, los costos y las pruebas:
+
+- **RTO propuesto: hasta 8 horas** para recuperar el servicio principal tras un incidente grave.
+- **RPO propuesto: hasta 24 horas** de pérdida máxima de cambios confirmados, como objetivo inicial coherente con la propuesta de respaldo diario. La configuración real de Azure SQL Database puede permitir una recuperación a un punto en el tiempo más reciente; el RPO definitivo debe basarse en la configuración y en una prueba, no asumirse.
+- **Respaldo:** al menos diario, con retención inicial propuesta de 30 días, pendiente de validación.
+- **Prueba de restauración:** al menos trimestral y después de cambios importantes en la estrategia de respaldo o recuperación.
+
+Procedimiento mínimo: identificar el incidente; avisar al responsable designado; determinar el punto de recuperación disponible; restaurar primero en un entorno controlado; comprobar integridad y consistencia de datos; documentar duración, punto recuperado y resultados; obtener aprobación antes de volver a poner el servicio en producción. Los respaldos y las credenciales de recuperación tendrán acceso restringido.
+
+RTO y RPO son objetivos propuestos, no garantías de servicio ni resultados probados. La Municipalidad debe aprobarlos y asignar un responsable antes de la puesta en producción.
+

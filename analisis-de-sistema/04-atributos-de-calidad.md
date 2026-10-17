@@ -18,7 +18,7 @@ Los criterios cuantitativos y su método de verificación se detallan en [07-req
 | AC06 | **Auditabilidad** | Cada alta, modificación, baja lógica o decisión de revisión del padrón registrará como mínimo usuario, fecha y hora, operación y motivo. El historial estará protegido y limitado a roles autorizados. | RNF-06 |
 | AC07 | **Capacidad y escalabilidad** | La solución soportará al menos 15 000 beneficiarios. Como objetivo inicial pendiente de validación, las consultas habituales tendrán percentil 95 inferior a 2 segundos con 20 usuarios concurrentes, excluyendo exportaciones y mapas pesados. | RNF-07 |
 | AC08 | **Mantenibilidad** | Incorporar un programa social nuevo no debe requerir duplicar módulos transversales ni rediseñar la arquitectura; el impacto sobre componentes compartidos deberá documentarse. | RNF-08 |
-| AC09 | **Respaldo de información** | Azure SQL Database tendrá respaldos diarios. Se propone inicialmente una retención de 30 días y pruebas trimestrales de restauración, pendientes de validación operativa. | RNF-09 |
+| AC09 | **Respaldo de información** | Azure SQL Database tendrá respaldos diarios. Se propone inicialmente una retención de 30 días y pruebas trimestrales de restauración. Como objetivos iniciales por validar se plantean RTO de hasta 8 horas y RPO de hasta 24 horas; deben verificarse con la configuración contratada y pruebas de recuperación, sin considerarse garantías. | RNF-09 |
 
 ## Escenarios con formato estímulo – respuesta – medida
 
@@ -61,3 +61,18 @@ La revalidación se gestionará por inscripción y no como un estado global de l
 ## Confiabilidad de notificaciones externas
 
 Las notificaciones se tratarán como tareas independientes de la confirmación de una inscripción. Se registrarán estados diferenciados (pendiente, aceptado por proveedor, entregado, fallido o desconocido), con reintentos limitados para fallos temporales y revisión de errores permanentes. El sistema no debe afirmar que un mensaje fue entregado si el proveedor no confirma ese estado. La falla de SMS/WhatsApp no debe revertir una operación de padrón confirmada. El mensaje minimizará datos personales y los resultados quedarán disponibles para personal autorizado. Estos criterios requieren pruebas cuando exista la integración.
+
+
+## Objetivos propuestos de recuperación ante incidentes
+
+Como punto de partida para revisión municipal, se proponen estos objetivos de servicio, sujetos a confirmar con la configuración contratada de Azure, los costos y las pruebas:
+
+- **RTO propuesto: hasta 8 horas** para recuperar el servicio principal tras un incidente grave.
+- **RPO propuesto: hasta 24 horas** de pérdida máxima de cambios confirmados, como objetivo inicial coherente con la propuesta de respaldo diario. La configuración real de Azure SQL Database puede permitir una recuperación a un punto en el tiempo más reciente; el RPO definitivo debe basarse en la configuración y en una prueba, no asumirse.
+- **Respaldo:** al menos diario, con retención inicial propuesta de 30 días, pendiente de validación.
+- **Prueba de restauración:** al menos trimestral y después de cambios importantes en la estrategia de respaldo o recuperación.
+
+Procedimiento mínimo: identificar el incidente; avisar al responsable designado; determinar el punto de recuperación disponible; restaurar primero en un entorno controlado; comprobar integridad y consistencia de datos; documentar duración, punto recuperado y resultados; obtener aprobación antes de volver a poner el servicio en producción. Los respaldos y las credenciales de recuperación tendrán acceso restringido.
+
+RTO y RPO son objetivos propuestos, no garantías de servicio ni resultados probados. La Municipalidad debe aprobarlos y asignar un responsable antes de la puesta en producción.
+
