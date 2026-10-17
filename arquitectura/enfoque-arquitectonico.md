@@ -101,7 +101,7 @@ La capa de persistencia utilizará Entity Framework Core 10 con el proveedor Mic
 
 - La primera versión valida el DNI mediante los datos registrados en el propio sistema. Las integraciones directas con RENIEC y SISFOH quedan para una fase posterior.
 - Las capacidades PWA y el soporte offline se implementarán dentro de la aplicación web ASP.NET Core MVC; no implican desarrollar un frontend independiente.
-- La sincronización offline utilizará registros pendientes identificados de forma única, reintentos idempotentes y validación final del lado servidor. Los estados y conflictos se mostrarán al usuario; los conflictos no producirán sobrescrituras automáticas. La persistencia local debe limitar los datos personales y excluirlos de la caché de recursos estáticos.
+- La sincronización offline utilizará registros pendientes identificados de forma única, reintentos idempotentes y validación final del lado servidor. Los estados y conflictos se mostrarán al usuario; los conflictos no producirán sobrescrituras automáticas. La persistencia local se limitará a los campos imprescindibles; la cola offline quedará aislada por usuario/comité, no se expondrán operaciones pendientes a otra cuenta y los datos personales se excluirán de la caché de recursos estáticos.
 - Las notificaciones SMS/WhatsApp dependen de la disponibilidad y configuración de un proveedor externo.
 - El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 10 MVC, Razor, Entity Framework Core 10 y Azure SQL Database**.
 
@@ -127,3 +127,25 @@ La periodicidad semestral es la regla propuesta actualmente. Los responsables, e
 ## Aclaración del alcance de los actores
 
 En el alcance actual, los usuarios que interactúan directamente con las vistas son el dirigente de comité y el personal municipal autorizado. El beneficiario se identifica como destinatario de notificaciones SMS/WhatsApp y no requiere iniciar sesión ni utilizar una interfaz en esta versión. Si una versión futura incorpora un portal o aplicación para beneficiarios, deberá documentarse como un cambio de alcance y actualizarse entonces el modelo de actores correspondiente.
+
+
+## Protección de datos locales y dispositivos compartidos
+
+- **Minimización:** almacenar localmente solo los campos imprescindibles para las operaciones pendientes. No guardar padrones completos ni datos sensibles en la caché de recursos estáticos. La cola offline se separará de la caché de la interfaz.
+- **Aislamiento por cuenta:** cada operación pendiente quedará vinculada al identificador del usuario y al comité con el que se creó. Una cuenta diferente no podrá ver, enviar ni modificar la cola de otro usuario.
+- **Cierre de sesión:** si existen operaciones pendientes, advertir claramente que aún no están confirmadas y ofrecer volver para sincronizarlas cuando haya conexión o descartarlas mediante una confirmación explícita. No borrar silenciosamente datos pendientes ni permitir que la siguiente cuenta los herede. Hasta resolverlos, la cola permanecerá bloqueada para otras cuentas en ese dispositivo.
+- **Limpieza al salir:** al cerrar sesión, invalidar la sesión local y limpiar tokens, datos de vistas y cachés que no sean necesarios. Los registros pendientes solo podrán conservarse en un área local aislada de la cuenta propietaria, inaccesible para otros usuarios y visible al propietario tras volver a autenticarse. El borrado explícito debe advertir que los registros no sincronizados se perderán.
+- **Protección del dispositivo:** recomendar bloqueo de pantalla, sistema operativo actualizado y no compartir la cuenta. Usar HTTPS y las protecciones de almacenamiento disponibles en la plataforma. No considerar IndexedDB cifrado automáticamente ni prometer protección contra alguien que controle el dispositivo.
+- **Pérdida o robo:** un administrador autorizado podrá desactivar la cuenta y revocar sesiones del lado servidor; la sincronización posterior volverá a validar permisos. Una aplicación web no puede garantizar el borrado remoto de datos locales de un dispositivo perdido, por lo que la minimización y el bloqueo del dispositivo son esenciales.
+- **Caché y expiración:** almacenar en caché solo recursos estáticos necesarios para abrir la interfaz offline. No cachear respuestas de padrón, informes, exportaciones ni páginas con datos personales mediante caché compartida. Definir y probar la limpieza de caché y almacenamiento al cerrar sesión, al cambiar de usuario y al actualizar la aplicación.
+- **Límites de almacenamiento:** informar que el navegador puede eliminar datos locales y que el almacenamiento offline no sustituye una copia confirmada en el servidor. Los registros solo se consideran guardados en el sistema central después de recibir confirmación del servidor.
+
+### Pruebas de aceptación
+1. Una segunda cuenta en el mismo dispositivo no puede ver ni sincronizar operaciones pendientes de la primera.
+2. Cerrar sesión con registros pendientes muestra una advertencia y no los borra sin confirmación.
+3. Al descartar registros pendientes, se exige confirmación explícita y se muestra cuántas operaciones se perderán.
+4. La caché no contiene padrones completos, exportaciones ni respuestas con datos personales.
+5. Tras revocar una cuenta, el servidor rechaza su sincronización posterior y el cliente muestra el resultado sin confirmar los registros.
+6. El usuario recibe una advertencia sobre las limitaciones del almacenamiento local y el riesgo de pérdida o robo del dispositivo.
+
+Estas reglas describen el diseño esperado y quedan pendientes de implementación y pruebas. La Municipalidad debe aprobar los periodos de conservación local y las reglas para descartar operaciones pendientes.
