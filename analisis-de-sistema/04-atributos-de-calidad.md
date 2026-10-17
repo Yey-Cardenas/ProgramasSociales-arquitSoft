@@ -8,7 +8,7 @@ Un dirigente de comité registra a varios beneficiarios en una zona con baja cob
 
 | ID | Atributo de calidad | Escenario de calidad | Origen |
 |----|---------------------|----------------------|--------|
-| AC01 | **Disponibilidad** | El sistema debe estar disponible al menos el 99% del tiempo y permitir registros sin conexión (offline-first), sincronizándolos al recuperar la red. | RNF-01 |
+| AC01 | **Disponibilidad y operación offline** | El servicio debe estar disponible al menos el 99% del tiempo. Cuando no haya conexión, la PWA debe guardar localmente los registros pendientes y sincronizarlos al recuperar la red, mostrando su estado y evitando altas duplicadas por reintentos. Los conflictos de validación deben quedar identificados para revisión, sin sobrescribir datos automáticamente. | RNF-01 |
 | AC02 | **Rendimiento** | La validación de duplicados por DNI debe completarse en menos de 0.5 segundos. | RNF-02 |
 | AC03 | **Usabilidad** | El registro de un beneficiario debe completarse con un máximo de 5 campos obligatorios, pensando en dirigentes con poca experiencia tecnológica. | RNF-03 |
 | AC04 | **Seguridad y privacidad** | Los datos personales (DNI, dirección) deben estar protegidos mediante cifrado y accesos restringidos por rol. | RNF-04 |
@@ -33,5 +33,5 @@ Un dirigente de comité registra a varios beneficiarios en una zona con baja cob
 | Elemento | Descripción |
 |----------|-------------|
 | **Estímulo** | Un dirigente registra beneficiarios en una zona sin conexión a internet. |
-| **Respuesta** | La PWA guarda los registros en el dispositivo y los sincroniza automáticamente al recuperar la red. |
-| **Medida** | No se pierde ningún registro y el sistema se mantiene disponible al menos el 99% del tiempo. |
+| **Respuesta** | La PWA guarda cada registro pendiente en el dispositivo con un identificador único de operación. Al recuperar la conexión, intenta sincronizarlo con el servidor; el servidor valida el DNI y las reglas de negocio. Los reintentos no deben crear registros repetidos. Si el servidor detecta un duplicado o conflicto, el registro queda marcado para revisión y no reemplaza datos existentes. El usuario puede consultar si el registro está pendiente, sincronizado o requiere revisión. |
+| **Medida** | En pruebas de desconexión y reconexión, los registros guardados localmente permanecen pendientes hasta recibir confirmación del servidor; los reintentos no generan altas duplicadas; los conflictos quedan visibles para revisión y no se sobrescriben datos. La disponibilidad del servicio se mide por separado y debe alcanzar al menos el 99% del tiempo. |
