@@ -5,13 +5,13 @@
 
 ## 1. Definición del enfoque
 
-El sistema utilizará el patrón **Modelo-Vista-Controlador (MVC)** implementado con **C# y ASP.NET Core 9 MVC**, conforme al stack tecnológico establecido en el `README.md`. La aplicación se desplegará como un **monolito modular**: un único sistema organizado en módulos y capas con responsabilidades definidas.
+El sistema utilizará el patrón **Modelo-Vista-Controlador (MVC)** implementado con **C# y ASP.NET Core 10 MVC**, conforme al stack tecnológico establecido en el `README.md`. La aplicación se desplegará como un **monolito modular**: un único sistema organizado en módulos y capas con responsabilidades definidas.
 
-La presentación se implementará con vistas Razor (`.cshtml`), el acceso a datos se realizará mediante Entity Framework Core 9 y la persistencia se gestionará en Azure SQL Database. No se plantea un frontend independiente en React ni un backend separado con Node.js/Express.
+La presentación se implementará con vistas Razor (`.cshtml`), el acceso a datos se realizará mediante Entity Framework Core 10 y la persistencia se gestionará en Azure SQL Database. No se plantea un frontend independiente en React ni un backend separado con Node.js/Express.
 
 ## 2. Componentes del patrón MVC
 
-- **Modelo (Model):** representa las entidades y los datos del dominio, así como las reglas y servicios que procesan la información. El acceso a la persistencia se realizará mediante Entity Framework Core 9. Los patrones Repository y Unit of Work podrán utilizarse donde aporten claridad y control transaccional.
+- **Modelo (Model):** representa las entidades y los datos del dominio, así como las reglas y servicios que procesan la información. El acceso a la persistencia se realizará mediante Entity Framework Core 10. Los patrones Repository y Unit of Work podrán utilizarse donde aporten claridad y control transaccional.
 - **Vista (View):** presenta la información al usuario mediante vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap. La interfaz deberá adaptarse a diferentes tamaños de pantalla y podrá incorporar capacidades PWA para apoyar el trabajo con conectividad limitada.
 - **Controlador (Controller):** recibe las peticiones HTTP, valida la entrada, coordina los servicios de negocio y devuelve la vista o respuesta apropiada. Los controladores no deben concentrar reglas de negocio ni acceder directamente a la base de datos.
 
@@ -43,9 +43,9 @@ sequenceDiagram
 | Componente | Responsabilidad | Tecnología |
 |---|---|---|
 | Presentación | Formularios, listados y mensajes de respuesta. | Vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap. |
-| Controladores | Recibir solicitudes HTTP y coordinar el flujo de la aplicación. | ASP.NET Core MVC 9. |
-| Servicios de negocio | Aplicar reglas del padrón, validar duplicados, gestionar staging, reportes y notificaciones. | C# sobre .NET 9. |
-| Persistencia | Consultar y guardar información con control de integridad. | Entity Framework Core 9. |
+| Controladores | Recibir solicitudes HTTP y coordinar el flujo de la aplicación. | ASP.NET Core MVC 10. |
+| Servicios de negocio | Aplicar reglas del padrón, validar duplicados, gestionar staging, reportes y notificaciones. | C# sobre .NET 10. |
+| Persistencia | Consultar y guardar información con control de integridad. | Entity Framework Core 10. |
 | Base de datos | Almacenar beneficiarios, programas, comités, inscripciones y registros de auditoría. | Azure SQL Database. |
 | Integraciones externas | Enviar notificaciones por SMS/WhatsApp cuando corresponda. | Servicio de integración encapsulado en la capa de negocio. |
 
@@ -54,7 +54,7 @@ sequenceDiagram
 1. **Presentación:** las vistas se comunican con los controladores; no acceden directamente a la base de datos.
 2. **Controladores:** coordinan las peticiones y delegan las reglas del dominio a los servicios.
 3. **Lógica de negocio:** centraliza validaciones, reglas de duplicidad, staging, reportes y notificaciones.
-4. **Persistencia:** los servicios acceden a los datos mediante la capa de persistencia basada en Entity Framework Core 9.
+4. **Persistencia:** los servicios acceden a los datos mediante la capa de persistencia basada en Entity Framework Core 10.
 5. **Inyección de dependencias:** los servicios y repositorios necesarios se registran en el contenedor nativo de ASP.NET Core, configurado desde `Program.cs`.
 6. **Integraciones externas:** las llamadas a un gateway SMS/WhatsApp se encapsulan en servicios; no se realizan directamente desde las vistas.
 7. **Transacciones:** las operaciones que deban mantener consistencia se ejecutan con transacciones apropiadas en Azure SQL Database.
@@ -73,7 +73,7 @@ sequenceDiagram
 
 ## 7. Base de datos y persistencia
 
-El servicio de base de datos definido para el despliegue recomendado es **Azure SQL Database**. La aplicación accederá a ella mediante **Entity Framework Core 9**, utilizando el enfoque Code-First indicado en el README. El nombre concreto de la base de datos debe configurarse en el entorno de ejecución y no debe asumirse como definitivo solo por aparecer en un diagrama.
+El servicio de base de datos definido para el despliegue recomendado es **Azure SQL Database**. La aplicación accederá a ella mediante **Entity Framework Core 10**, utilizando el enfoque Code-First indicado en el README. El nombre concreto de la base de datos debe configurarse en el entorno de ejecución y no debe asumirse como definitivo solo por aparecer en un diagrama.
 
 Las reglas de integridad, las validaciones de negocio y las transacciones deberán prevenir registros inconsistentes. Los datos importados mediante staging se validarán antes de consolidarse en el padrón principal.
 
@@ -83,7 +83,7 @@ Las reglas de integridad, las validaciones de negocio y las transacciones deber�
 - Las capacidades PWA y el soporte offline se implementarán dentro de la aplicación web ASP.NET Core MVC; no implican desarrollar un frontend independiente.
 - La sincronización offline utilizará registros pendientes identificados de forma única, reintentos idempotentes y validación final del lado servidor. Los estados y conflictos se mostrarán al usuario; los conflictos no producirán sobrescrituras automáticas. La persistencia local debe limitar los datos personales y excluirlos de la caché de recursos estáticos.
 - Las notificaciones SMS/WhatsApp dependen de la disponibilidad y configuración de un proveedor externo.
-- El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 9 MVC, Razor, Entity Framework Core 9 y Azure SQL Database**.
+- El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 10 MVC, Razor, Entity Framework Core 10 y Azure SQL Database**.
 
 ## 9. Justificación
 

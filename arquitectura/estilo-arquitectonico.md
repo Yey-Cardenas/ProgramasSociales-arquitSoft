@@ -37,9 +37,9 @@ El sistema centraliza el padrón de beneficiarios del Programa del Vaso de Leche
 
 ## 4. Decisión arquitectónica
 
-Se adopta una **arquitectura en capas implementada como monolito modular**, utilizando el patrón **MVC (Modelo-Vista-Controlador) de ASP.NET Core 9**.
+Se adopta una **arquitectura en capas implementada como monolito modular**, utilizando el patrón **MVC (Modelo-Vista-Controlador) de ASP.NET Core 10**.
 
-La elección reduce la complejidad de desarrollo y despliegue, facilita las transacciones sobre el padrón y permite mantener los módulos organizados con responsabilidades claras. Esta decisión sigue el stack definido en el `README.md`: C#, ASP.NET Core 9 MVC, vistas Razor, Entity Framework Core 9 y Azure SQL Database.
+La elección reduce la complejidad de desarrollo y despliegue, facilita las transacciones sobre el padrón y permite mantener los módulos organizados con responsabilidades claras. Esta decisión sigue el stack definido en el `README.md`: C#, ASP.NET Core 10 MVC, vistas Razor, Entity Framework Core 10 y Azure SQL Database.
 
 | Driver | Justificación |
 |---|---|
@@ -55,8 +55,8 @@ La elección reduce la complejidad de desarrollo y despliegue, facilita las tran
 | Capa | Responsabilidad | Tecnologías y componentes |
 |---|---|---|
 | Presentación | Mostrar formularios, vistas y resultados; recibir las interacciones del usuario. | ASP.NET Core MVC, vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap; capacidades PWA según el alcance definido. |
-| Lógica de negocio | Aplicar reglas, validar beneficiarios, controlar duplicados, gestionar staging, reportes y notificaciones. | C# y servicios de aplicación en ASP.NET Core 9; inyección de dependencias. |
-| Acceso a datos | Consultar y persistir la información, manteniendo integridad transaccional. | Entity Framework Core 9, patrones Repository y Unit of Work cuando correspondan, Azure SQL Database. |
+| Lógica de negocio | Aplicar reglas, validar beneficiarios, controlar duplicados, gestionar staging, reportes y notificaciones. | C# y servicios de aplicación en ASP.NET Core 10; inyección de dependencias. |
+| Acceso a datos | Consultar y persistir la información, manteniendo integridad transaccional. | Entity Framework Core 10, patrones Repository y Unit of Work cuando correspondan, Azure SQL Database. |
 
 **Regla de dependencia:** las vistas no acceden directamente a la base de datos. Los controladores coordinan las peticiones y delegan las reglas a los servicios; el acceso a datos se realiza mediante la capa correspondiente.
 
@@ -102,7 +102,7 @@ Las integraciones con servicios externos se realizarán desde servicios de la ap
 
 ## 8. Recomendación de despliegue en la nube
 
-Se recomienda la opción A: alojar la aplicación ASP.NET Core 9 MVC en **Azure App Service** y mantener la base de datos en un recurso administrado separado. Se define **Azure SQL Database** como servicio de base de datos recomendado, por su administración de infraestructura, mantenimiento y respaldos. Esta separación es de despliegue y operación; la solución sigue siendo un monolito modular, no una arquitectura de microservicios.
+Se recomienda la opción A: alojar la aplicación ASP.NET Core 10 MVC en **Azure App Service** y mantener la base de datos en un recurso administrado separado. Se define **Azure SQL Database** como servicio de base de datos recomendado, por su administración de infraestructura, mantenimiento y respaldos. Esta separación es de despliegue y operación; la solución sigue siendo un monolito modular, no una arquitectura de microservicios.
 
 Criterios para el despliegue:
 
@@ -110,16 +110,16 @@ Criterios para el despliegue:
 - Guardar cadenas de conexión y secretos en una configuración segura, como Azure Key Vault o la configuración protegida del servicio; nunca versionarlos en GitHub.
 - Activar HTTPS, control de acceso por roles, monitoreo y respaldos; verificar la restauración de una copia.
 - Revisar costos de App Service, base de datos, almacenamiento, monitoreo y red antes de elegir los planes.
-- Probar las migraciones de EF Core 9 y todas las consultas con datos de prueba antes de migrar la base de datos.
+- Probar las migraciones de EF Core 10 y todas las consultas con datos de prueba antes de migrar la base de datos.
 - Confirmar mediante pruebas que Azure SQL Database soporte todas las funciones necesarias. Si se requiere una característica no disponible en este servicio, documentar y aprobar una alternativa antes de modificar la decisión.
 
 Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero debe documentarse cualquier reducción de seguridad. La configuración de producción debe aplicar restricciones de red y protección de datos desde el inicio.
 
 ## 9. Stack tecnológico de referencia
 
-- **Backend y framework web:** C# con ASP.NET Core 9 MVC.
+- **Backend y framework web:** C# con ASP.NET Core 10 MVC.
 - **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
-- **Persistencia / ORM:** Entity Framework Core 9, con enfoque Code-First según el diseño.
+- **Persistencia / ORM:** Entity Framework Core 10, con enfoque Code-First según el diseño.
 - **Base de datos:** Azure SQL Database.
 - **Arquitectura:** monolito modular organizado en capas, con patrón MVC.
 - **PWA:** capacidades web progresivas y soporte offline dentro de los límites definidos para la aplicación.

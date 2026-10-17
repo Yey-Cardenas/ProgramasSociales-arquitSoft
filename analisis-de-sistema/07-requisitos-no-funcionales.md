@@ -31,7 +31,7 @@ Antes de aprobar estos requisitos, el equipo debe confirmar con la Municipalidad
 5. La matriz oficial de dispositivos y navegadores soportados.
 6. Los plazos de conservación de auditoría y respaldos, el responsable operativo y los objetivos de recuperación.
 7. El costo mensual de App Service, base de datos, almacenamiento, monitoreo y conectividad privada, antes de contratar los recursos.
-8. La compatibilidad de Azure SQL Database con las consultas, tipos de datos, migraciones de EF Core 9 y demás funcionalidades requeridas por la aplicación.
+8. La compatibilidad de Azure SQL Database con las consultas, tipos de datos, migraciones de EF Core 10 y demás funcionalidades requeridas por la aplicación.
 
 ## Trazabilidad
 

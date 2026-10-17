@@ -1,6 +1,6 @@
 ﻿# 🏛️ Sistema de Gestión de Programas Sociales - Huamanga
 
-![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-MVC-blue?style=flat-square&logo=windows)
 ![Azure SQL Database](https://img.shields.io/badge/Azure_SQL_Database-Azure-0078D4?style=flat-square&logo=microsoftazure)
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito_Modular-success?style=flat-square)
@@ -31,14 +31,16 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 - **Acceso a datos:** Entity Framework Core, enfoque Code-First.
 
 ## 💻 Stack tecnológico
-- **Backend:** C# con ASP.NET Core 9.
+- **Backend:** C# con ASP.NET Core 10.
 - **Presentación:** Vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap; capacidades PWA.
 - **Base de datos:** Azure SQL Database (servicio administrado relacional compatible con el ecosistema SQL Server).
-- **ORM:** Entity Framework Core 9.
+- **ORM:** Entity Framework Core 10.
+
+**Estado de la versión:** .NET 10 LTS, ASP.NET Core 10 y Entity Framework Core 10 son el objetivo tecnológico recomendado para la implementación. Como el repositorio contiene documentación y no el código de la aplicación, esta actualización aún no constituye una migración ejecutada ni probada.
 
 ## ☁️ Despliegue recomendado
 
-Se define la opción A como despliegue recomendado: **Azure App Service** para alojar la aplicación ASP.NET Core 9 MVC y **Azure SQL Database** como servicio administrado de base de datos separado. Antes de una implementación real se comprobará la compatibilidad de las consultas, tipos de datos, migraciones de Entity Framework Core 9 y demás funcionalidades necesarias. El acceso a la base de datos se restringirá a la aplicación, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se estimarán los costos mensuales y se probarán los respaldos y la restauración. Esta es una decisión de diseño documentada; el repositorio todavía no contiene una aplicación desplegada.
+Se define la opción A como despliegue recomendado: **Azure App Service** para alojar la aplicación ASP.NET Core 10 MVC y **Azure SQL Database** como servicio administrado de base de datos separado. Antes de una implementación real se comprobará la compatibilidad de las consultas, tipos de datos, migraciones de Entity Framework Core 10 y demás funcionalidades necesarias. El acceso a la base de datos se restringirá a la aplicación, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se estimarán los costos mensuales y se probarán los respaldos y la restauración. Esta es una decisión de diseño documentada; el repositorio todavía no contiene una aplicación desplegada.
 
 ## 📚 Documentación del repositorio
 

@@ -13,7 +13,7 @@ Los drivers se derivan de los requisitos funcionales, restricciones y atributos 
 | DA05 | La solución debe ser de bajo costo y baja complejidad operativa. | RC01 – Monolito Modular; RC07 – Infraestructura y nube; AC07 – Escalabilidad | Se mantiene un único sistema desplegable (monolito modular) y se define la separación de la aplicación y la base de datos como servicios administrados: Azure App Service para ASP.NET Core MVC y Azure SQL Database para persistencia. La separación no implica microservicios. Se debe restringir el acceso a la base de datos y estimar los costos de planes, conectividad privada, almacenamiento y respaldos antes de contratar el servicio. |
 | DA06 | El sistema debe notificar mediante un gateway SMS/WhatsApp externo. | RC06 – Gateway; RF-07 | Condiciona la integración con un servicio externo desde la capa de servicios. Se deben definir los estados de envío y el tratamiento de errores; una cola de mensajes puede evaluarse si la implementación y el proveedor lo requieren. |
 | DA07 | Los padrones históricos en Excel/papel deben depurarse antes de consolidarse. | RF-11 – Staging | Obliga a disponer de un módulo de staging separado del padrón definitivo, con validación de formato, detección de duplicados, registro de errores y revisión antes de consolidar datos. |
-| DA08 | La cobertura debe visualizarse geográficamente por zona. | RF-08, RF-09; RC05 – Azure SQL Database | Condiciona el modelado de zonas, distritos y datos geográficos necesarios para agrupar y presentar beneficiarios activos. La persistencia se realizará en Azure SQL Database mediante Entity Framework Core 9, de acuerdo con el stack aprobado en el README. La fuente de límites geográficos y población estimada debe definirse con datos municipales u otra fuente validada. No se requiere introducir PostgreSQL ni PostGIS como parte de la arquitectura actual. |
+| DA08 | La cobertura debe visualizarse geográficamente por zona. | RF-08, RF-09; RC05 – Azure SQL Database | Condiciona el modelado de zonas, distritos y datos geográficos necesarios para agrupar y presentar beneficiarios activos. La persistencia se realizará en Azure SQL Database mediante Entity Framework Core 10, de acuerdo con el stack aprobado en el README. La fuente de límites geográficos y población estimada debe definirse con datos municipales u otra fuente validada. No se requiere introducir PostgreSQL ni PostGIS como parte de la arquitectura actual. |
 
 ## Evaluación de otros elementos
 
@@ -28,9 +28,9 @@ Los drivers se derivan de los requisitos funcionales, restricciones y atributos 
 
 Este documento debe mantenerse alineado con el `README.md` del repositorio. El stack aprobado para esta versión es:
 
-- **Backend y aplicación web:** C# con ASP.NET Core 9 MVC.
+- **Backend y aplicación web:** C# con ASP.NET Core 10 MVC.
 - **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
-- **ORM y persistencia:** Entity Framework Core 9, con enfoque Code-First.
+- **ORM y persistencia:** Entity Framework Core 10, con enfoque Code-First.
 - **Base de datos:** Azure SQL Database.
 - **Estilo arquitectónico:** monolito modular organizado en capas.
 - **PWA:** capacidades progresivas y funcionamiento offline dentro de la aplicación web existente.
