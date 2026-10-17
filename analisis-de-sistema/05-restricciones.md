@@ -60,3 +60,8 @@ Las decisiones tecnológicas de este documento deben mantenerse alineadas con el
 
 La selección del proveedor, costos, consentimiento, plantillas, límites de reintento y reglas de contacto deben confirmarse antes de la implementación. Este apartado define el comportamiento esperado, no una integración ya desplegada.
 
+
+
+## Restricciones de importación de padrones históricos
+
+Los padrones históricos se importarán primero a un área temporal de staging; no se cargarán directamente al padrón definitivo. Solo personal autorizado podrá aprobar la consolidación. Los archivos y reportes que contengan datos personales deberán tener acceso restringido y una retención definida por la Municipalidad. Los formatos aceptados, tamaño máximo, responsables y plazos de conservación quedan pendientes de validación.

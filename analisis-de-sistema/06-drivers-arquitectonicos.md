@@ -12,7 +12,7 @@ Los drivers se derivan de los requisitos funcionales, restricciones y atributos 
 | DA04 | Debe poder incorporar nuevos programas sociales sin rediseñar el sistema. | AC08 – Mantenibilidad | Exige módulos cohesionados y de bajo acoplamiento, con límites claros dentro del monolito modular y dependencias organizadas por capas. |
 | DA05 | La solución debe ser de bajo costo y baja complejidad operativa. | RC01 – Monolito Modular; RC07 – Infraestructura y nube; AC07 – Escalabilidad | Se mantiene un único sistema desplegable (monolito modular) y se define la separación de la aplicación y la base de datos como servicios administrados: Azure App Service para ASP.NET Core MVC y Azure SQL Database para persistencia. La separación no implica microservicios. Se debe restringir el acceso a la base de datos y estimar los costos de planes, conectividad privada, almacenamiento y respaldos antes de contratar el servicio. |
 | DA06 | El sistema debe notificar mediante un gateway SMS/WhatsApp externo y registrar fallos. | RC06 – Gateway; RF-07 | Condiciona una integración desacoplada desde la capa de servicios, con estados diferenciados de envío y entrega, reintentos limitados para errores temporales y revisión de fallos permanentes. Una cola o patrón Outbox puede evaluarse para mejorar la confiabilidad cuando se implemente; no se presupone que exista. La falla del proveedor no revierte una inscripción confirmada. |
-| DA07 | Los padrones históricos en Excel/papel deben depurarse antes de consolidarse. | RF-11 – Staging | Obliga a disponer de un módulo de staging separado del padrón definitivo, con validación de formato, detección de duplicados, registro de errores y revisión antes de consolidar datos. |
+| DA07 | Los padrones históricos en Excel/CSV deben depurarse y aprobarse antes de consolidarse. | RF-11 – Staging | Obliga a disponer de lotes temporales separados del padrón definitivo, con validación de formato, clasificación de errores, detección de duplicados, revisión por personal autorizado, consolidación transaccional y auditoría del resultado. Una falla no debe dejar una carga parcial no controlada. |
 | DA08 | La cobertura debe visualizarse geográficamente por zona. | RF-08, RF-09; RC05 – Azure SQL Database | Condiciona el modelado de zonas, distritos y datos geográficos necesarios para agrupar y presentar beneficiarios activos. La persistencia se realizará en Azure SQL Database mediante Entity Framework Core 10, de acuerdo con el stack aprobado en el README. La fuente de límites geográficos y población estimada debe definirse con datos municipales u otra fuente validada. No se requiere introducir PostgreSQL ni PostGIS como parte de la arquitectura actual. |
 
 ## Autorización y segregación de responsabilidades
@@ -71,4 +71,18 @@ La Sub Gerencia designará a los usuarios autorizados para resolver alertas. El 
 - **Supervisión:** personal autorizado podrá consultar fallos y reintentar o corregir contactos según sus permisos. Los registros de notificación deberán respetar las reglas de privacidad y auditoría.
 
 La selección del proveedor, costos, consentimiento, plantillas, límites de reintento y reglas de contacto deben confirmarse antes de la implementación. Este apartado define el comportamiento esperado, no una integración ya desplegada.
+
+
+
+## Procedimiento seguro de importación de padrones históricos
+
+1. **Cargar a staging:** importar Excel/CSV a un lote temporal identificado, sin escribir directamente en el padrón definitivo. Registrar quién carga el archivo, fecha/hora, nombre del archivo y un identificador de lote.
+2. **Validar formato:** comprobar extensión/tamaño permitido, columnas esperadas, campos obligatorios, formato de DNI, codificación y filas vacías o mal formadas. Rechazar archivos no válidos sin alterar el padrón definitivo.
+3. **Previsualizar y clasificar:** presentar conteos de filas válidas, inválidas, duplicadas, incompletas y pendientes de revisión; permitir descargar un reporte de errores sin exponer datos innecesarios.
+4. **Resolver inconsistencias:** no corregir ni fusionar automáticamente personas por coincidencias aproximadas. Los casos dudosos se asignan a personal autorizado; el DNI se valida según las reglas de identidad y duplicidad del sistema.
+5. **Aprobar y consolidar:** solo un usuario con permiso específico aprueba el lote. La consolidación debe ser transaccional: se aplican todas las filas aprobadas del lote o ninguna. Los errores deben dejar el lote en estado de revisión sin producir una carga parcial no controlada.
+6. **Auditar y verificar:** guardar el archivo/lote de referencia según la política de retención aprobada, el usuario que aprobó, fecha/hora, resumen de filas, errores y resultado. Tras consolidar, mostrar un resumen verificable de altas, actualizaciones, rechazos y pendientes.
+7. **Cancelar o revertir:** antes de consolidar, el lote puede cancelarse sin modificar el padrón. Después de consolidar, una reversión solo podrá ejecutarse mediante una operación autorizada y auditada que identifique los cambios del lote y compruebe que no sobrescriba cambios posteriores; si no es segura, se requiere corrección manual supervisada.
+
+La importación debe respetar los permisos por comité y las reglas de duplicidad por programa. Los archivos con datos personales deberán tener acceso restringido y no se mantendrán indefinidamente en staging. El formato exacto, tamaño máximo, retención y responsables de aprobación deben validarse con la Municipalidad. Este flujo es una propuesta de diseño pendiente de implementación y pruebas.
 

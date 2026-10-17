@@ -107,3 +107,16 @@ Los roles responsables y el procedimiento final deben aprobarse con la Municipal
 - El personal autorizado puede revisar el historial de avisos y sus errores.
 
 La selección del proveedor, consentimiento, límites de reintento y pruebas de entrega deben definirse antes de implementar. Estos criterios aún no han sido probados.
+
+
+## Criterios de aceptación de importación de padrones
+
+- Un archivo inválido no modifica el padrón definitivo.
+- Cada importación genera un lote identificable con usuario y fecha/hora.
+- La vista previa informa filas válidas, inválidas, duplicadas y pendientes de revisión.
+- Ningún lote se consolida sin aprobación de un usuario autorizado.
+- La consolidación se ejecuta de forma transaccional y no deja una carga parcial no controlada si ocurre un error.
+- Los resultados y errores quedan auditados; cancelar un lote no consolidado no modifica el padrón.
+- Una reversión posterior identifica los cambios del lote y no sobrescribe cambios posteriores sin revisión.
+
+Los formatos, tamaño máximo, retención y procedimiento final de aprobación deben validarse con la Municipalidad. Estas pruebas están pendientes de la implementación.
