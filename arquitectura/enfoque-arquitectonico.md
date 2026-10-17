@@ -57,7 +57,7 @@ sequenceDiagram
 4. **Persistencia:** los servicios acceden a los datos mediante la capa de persistencia basada en Entity Framework Core 9.
 5. **Inyección de dependencias:** los servicios y repositorios necesarios se registran en el contenedor nativo de ASP.NET Core, configurado desde `Program.cs`.
 6. **Integraciones externas:** las llamadas a un gateway SMS/WhatsApp se encapsulan en servicios; no se realizan directamente desde las vistas.
-7. **Transacciones:** las operaciones que deban mantener consistencia se ejecutan con transacciones apropiadas en SQL Server.
+7. **Transacciones:** las operaciones que deban mantener consistencia se ejecutan con transacciones apropiadas en Azure SQL Database.
 
 ## 6. Asignación de requisitos a módulos
 
