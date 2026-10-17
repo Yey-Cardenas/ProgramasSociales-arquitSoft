@@ -17,19 +17,6 @@ Los niveles 1, 2 y 3 describen contexto, contenedores y componentes. El nivel 4 
 Los diagramas están escritos en Markdown con Mermaid. GitHub puede renderizar los bloques Mermaid directamente dentro de los archivos, lo que permite visualizarlos y editarlos como texto. Los diagramas preexistentes en otros documentos del repositorio se conservan sin cambios.
 
 
-## Diagramas visuales editables estilo Draw.io
-
-Se agregan versiones gráficas complementarias con un estilo visual similar al de la documentación de referencia. Los archivos `.svg` se pueden visualizar directamente desde GitHub y los archivos `.drawio` se pueden abrir y editar en [diagrams.net](https://app.diagrams.net/).
-
-| Vista | Diagrama visual | Fuente editable |
-|---|---|---|
-| Nivel 1 — Contexto | [Ver SVG](visual/C4-Nivel-1-Contexto.svg) | [Editar Draw.io](visual/C4-Nivel-1-Contexto.drawio) |
-| Nivel 2 — Contenedores | [Ver SVG](visual/C4-Nivel-2-Contenedores.svg) | [Editar Draw.io](visual/C4-Nivel-2-Contenedores.drawio) |
-| Nivel 3 — Componentes | [Ver SVG](visual/C4-Nivel-3-Componentes.svg) | [Editar Draw.io](visual/C4-Nivel-3-Componentes.drawio) |
-| Nivel 4 — Código complementario | [Ver SVG](visual/C4-Nivel-4-Codigo.svg) | [Editar Draw.io](visual/C4-Nivel-4-Codigo.drawio) |
-| Despliegue físico | [Ver SVG](visual/C4-Despliegue-Fisico.svg) | [Editar Draw.io](visual/C4-Despliegue-Fisico.drawio) |
-
-Estas versiones visuales se agregan como archivos nuevos. No se sustituyen ni se editan los bloques Mermaid existentes; así se conserva la versión original y se ofrece una alternativa gráfica editable.
 
 ## Criterios de interpretación
 
