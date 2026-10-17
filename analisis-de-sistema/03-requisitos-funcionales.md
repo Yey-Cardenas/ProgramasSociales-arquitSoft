@@ -6,11 +6,11 @@
 |----|--------|---------------------|
 | RF-01 | Registro de beneficiarios | El sistema debe permitir a los dirigentes de comité registrar beneficiarios usando el DNI como dato obligatorio. |
 | RF-02 | Registro de beneficiarios | El sistema debe identificar a la persona por su DNI y distinguirla de sus inscripciones. Debe impedir una inscripción activa duplicada de la misma persona en el mismo programa y comité. Si existe una inscripción activa en otro comité del mismo programa, debe generar una alerta y derivar el caso a la Sub Gerencia para revisión antes de confirmar la nueva inscripción. La existencia del DNI en otro programa no se considerará por sí sola una duplicidad: se validarán las reglas de elegibilidad de cada programa. |
-| RF-03 | Registro de beneficiarios | El sistema debe permitir marcar a un beneficiario como inactivo (fallecimiento, cambio de condición o inasistencia prolongada). |
+| RF-03 | Gestión de inscripciones | El sistema debe permitir registrar una novedad que pueda afectar la elegibilidad y gestionar el estado de una inscripción específica, conservando la identidad de la persona y sus otras inscripciones. La baja o no revalidación debe seguir el procedimiento aprobado y quedar auditada; no se debe desactivar automáticamente a la persona en todos los programas. |
 | RF-04 | Detección de duplicados | El sistema debe alertar al personal de la Sub Gerencia cuando se detecte un posible duplicado, para su evaluación. |
 | RF-05 | Detección de duplicados | El sistema debe mantener un historial de cambios del padrón (altas, bajas, modificaciones) con fecha y usuario responsable. |
-| RF-06 | Revalidación periódica | El sistema debe solicitar la revalidación de cada beneficiario cada 6 meses, notificando al comité cuando corresponda. |
-| RF-07 | Revalidación periódica | El sistema debe enviar una notificación por SMS/WhatsApp al beneficiario cuando su inscripción sea aprobada o deba revalidar sus datos. |
+| RF-06 | Revalidación periódica | El sistema debe generar una tarea de revalidación cada 6 meses por inscripción, notificar al comité asignado y registrar estados y resultados. La falta de respuesta o el vencimiento no deben causar una baja automática; los casos pendientes se recordarán o escalarán según plazos aprobados por la Municipalidad. |
+| RF-07 | Notificaciones | El sistema debe enviar una notificación por SMS/WhatsApp cuando una inscripción sea aprobada o requiera revalidación, si existe un contacto válido y el canal está disponible, y registrar el resultado del envío sin incluir datos personales innecesarios en el mensaje. |
 | RF-08 | Cobertura y reportes | El sistema debe mostrar un mapa con la cantidad de beneficiarios activos por zona o distrito. |
 | RF-09 | Cobertura y reportes | El sistema debe generar reportes de cobertura, comparando beneficiarios registrados frente a la población estimada por zona. |
 | RF-10 | Cobertura y reportes | El sistema debe permitir exportar el padrón depurado en Excel/PDF. |
@@ -43,3 +43,9 @@ El DNI identifica a la persona, no a una inscripción única para todos los prog
 | HU09 Importar y depurar padrones | RF-11 |
 | HU10 Iniciar sesión según rol | RF-12, RF-13 |
 | HU11 Registrar sin conexión | RF-14 |
+
+
+## Flujo de revalidación de inscripciones
+
+La revalidación se aplica a cada inscripción por programa y no a la persona de forma global. El sistema crea una tarea semestral, notifica al dirigente asignado y registra la verificación. Los casos dudosos se derivan a la Sub Gerencia. Debe registrarse el resultado, la fecha, el responsable y el motivo. Si no hay respuesta, la inscripción queda pendiente y se recuerda o escala conforme a los plazos que apruebe la Municipalidad; no se da de baja automáticamente. La no revalidación requiere decisión de personal autorizado conforme al procedimiento municipal y no afecta automáticamente las inscripciones en otros programas. Los estados, evidencias y plazos deben validarse con el área usuaria.
+

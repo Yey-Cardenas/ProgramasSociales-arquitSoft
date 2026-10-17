@@ -71,3 +71,15 @@ Antes de producción, comprobar que Azure SQL Database no acepte conexiones púb
 ## Pruebas de autorización por rol y ámbito
 
 Antes de aceptar la implementación se probará, como mínimo, que: (1) un dirigente solo consulta y modifica su propio comité; (2) el acceso directo por URL o petición a otro comité es rechazado por el servidor; (3) un usuario municipal sin privilegios administrativos no puede gestionar cuentas ni asignaciones; (4) las decisiones de revisión de duplicados quedan auditadas; y (5) la sincronización offline rechaza operaciones de cuentas desactivadas o sin permiso vigente. Estas pruebas están pendientes porque el repositorio aún no contiene la aplicación.
+
+
+## Criterios de aceptación de revalidación
+
+- La tarea de revalidación se genera para cada inscripción al cumplirse el periodo semestral definido.
+- El sistema registra estado, fecha, responsable y motivo del resultado.
+- Un caso sin respuesta permanece pendiente; no se da de baja automáticamente por el solo vencimiento.
+- Solo personal autorizado puede registrar la decisión final de no revalidación cuando así lo determine el procedimiento municipal.
+- Cambiar el estado de una inscripción no modifica automáticamente otras inscripciones de la misma persona.
+- Los recordatorios y escalamiento usan plazos aprobados por la Municipalidad.
+
+Los plazos, estados definitivos, evidencia aceptable y autoridad final deben ser aprobados por el área usuaria. Estas pruebas están pendientes de la implementación.

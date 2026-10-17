@@ -48,3 +48,8 @@ Este documento debe mantenerse alineado con el `README.md` del repositorio. El s
 - **PWA:** capacidades progresivas y funcionamiento offline dentro de la aplicación web existente.
 
 PostgreSQL, PostGIS, React, Node.js, Express y Prisma no forman parte del stack elegido. Azure SQL Database es el servicio de base de datos seleccionado para el despliegue recomendado. Antes de implementarlo se comprobará que las consultas, tipos de datos y migraciones de EF Core necesarias sean compatibles. Si se detecta una limitación, cualquier alternativa deberá aprobarse y documentarse formalmente antes de cambiar la decisión.
+
+
+## Driver de revalidación y continuidad de inscripción
+
+La revalidación semestral se modelará por inscripción de una persona en un programa/comité. El sistema creará tareas, registrará estados y decisiones auditables, y derivará los casos dudosos a la Sub Gerencia. La ausencia de respuesta no provocará una baja automática; deberá existir un recordatorio o escalamiento según el procedimiento que apruebe la Municipalidad. Una decisión solo afectará la inscripción correspondiente y no las demás inscripciones de la persona. La regla y sus plazos requieren validación del área usuaria.

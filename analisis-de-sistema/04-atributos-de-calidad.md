@@ -51,3 +51,8 @@ La solución propuesta utiliza Azure SQL Database con Entity Framework Core 10 y
 ## Verificación de seguridad de red
 
 Antes de producción se revisarán las reglas de acceso a Azure SQL Database, los permisos de la aplicación, el uso seguro de secretos y la eliminación de accesos temporales de desarrollo. La exposición pública irrestricta no es aceptable. La comprobación queda pendiente hasta que exista una infraestructura desplegada.
+
+
+## Seguridad y trazabilidad del proceso de revalidación
+
+La revalidación se gestionará por inscripción y no como un estado global de la persona. El proceso registrará tarea, estado, fecha, responsable y motivo de la decisión. La falta de respuesta no generará una baja automática: el caso seguirá pendiente y se recordará o escalará conforme a los plazos que apruebe la Municipalidad. Las decisiones que afecten la continuidad del apoyo deben ser tomadas por personal autorizado según el procedimiento municipal. Estos criterios deberán validarse y probarse cuando exista la aplicación.
