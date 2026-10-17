@@ -56,3 +56,8 @@ Antes de producción se revisarán las reglas de acceso a Azure SQL Database, lo
 ## Seguridad y trazabilidad del proceso de revalidación
 
 La revalidación se gestionará por inscripción y no como un estado global de la persona. El proceso registrará tarea, estado, fecha, responsable y motivo de la decisión. La falta de respuesta no generará una baja automática: el caso seguirá pendiente y se recordará o escalará conforme a los plazos que apruebe la Municipalidad. Las decisiones que afecten la continuidad del apoyo deben ser tomadas por personal autorizado según el procedimiento municipal. Estos criterios deberán validarse y probarse cuando exista la aplicación.
+
+
+## Confiabilidad de notificaciones externas
+
+Las notificaciones se tratarán como tareas independientes de la confirmación de una inscripción. Se registrarán estados diferenciados (pendiente, aceptado por proveedor, entregado, fallido o desconocido), con reintentos limitados para fallos temporales y revisión de errores permanentes. El sistema no debe afirmar que un mensaje fue entregado si el proveedor no confirma ese estado. La falla de SMS/WhatsApp no debe revertir una operación de padrón confirmada. El mensaje minimizará datos personales y los resultados quedarán disponibles para personal autorizado. Estos criterios requieren pruebas cuando exista la integración.

@@ -95,3 +95,15 @@ Los plazos, estados definitivos, evidencia aceptable y autoridad final deben ser
 - Las correcciones posteriores conservan la decisión previa y quedan registradas como una nueva operación.
 
 Los roles responsables y el procedimiento final deben aprobarse con la Municipalidad. Estas pruebas están pendientes de la implementación.
+
+
+## Criterios de aceptación de notificaciones
+
+- El sistema distingue el estado aceptado por el proveedor del estado de entrega confirmada.
+- Los fallos temporales se reintentan con espera progresiva y límite configurado; los fallos permanentes se marcan para corrección o revisión.
+- Cada aviso tiene un identificador interno para detectar reintentos y registrar resultados inciertos sin asegurar falsamente que no se envió.
+- El fallo del proveedor no revierte una inscripción confirmada ni bloquea el registro principal.
+- Los mensajes minimizan los datos personales y se envían solo a un contacto válido según las reglas aprobadas.
+- El personal autorizado puede revisar el historial de avisos y sus errores.
+
+La selección del proveedor, consentimiento, límites de reintento y pruebas de entrega deben definirse antes de implementar. Estos criterios aún no han sido probados.

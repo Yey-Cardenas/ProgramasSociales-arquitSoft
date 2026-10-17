@@ -10,7 +10,7 @@
 | RF-04 | Detección y resolución de duplicados | El sistema debe generar una alerta cuando una inscripción activa en otro comité del mismo programa pueda representar una duplicidad. Solo personal autorizado de la Sub Gerencia podrá resolverla, registrando uno de estos resultados: no es duplicado, duplicado confirmado, requiere información adicional o derivado para decisión superior. Mientras esté pendiente, no se confirmará la nueva inscripción en conflicto. |
 | RF-05 | Auditoría del padrón y duplicados | El sistema debe mantener un historial de altas, modificaciones, bajas lógicas y decisiones sobre alertas, registrando identificador de alerta, inscripciones y comités implicados, resultado, motivo/evidencia, usuario responsable y fecha/hora. Las correcciones posteriores se registrarán como nuevas operaciones, sin borrar la decisión anterior. |
 | RF-06 | Revalidación periódica | El sistema debe generar una tarea de revalidación cada 6 meses por inscripción, notificar al comité asignado y registrar estados y resultados. La falta de respuesta o el vencimiento no deben causar una baja automática; los casos pendientes se recordarán o escalarán según plazos aprobados por la Municipalidad. |
-| RF-07 | Notificaciones | El sistema debe enviar una notificación por SMS/WhatsApp cuando una inscripción sea aprobada o requiera revalidación, si existe un contacto válido y el canal está disponible, y registrar el resultado del envío sin incluir datos personales innecesarios en el mensaje. |
+| RF-07 | Notificaciones | El sistema debe crear avisos de aprobación y revalidación cuando exista un contacto válido y el canal esté habilitado. Debe registrar canal, fecha/hora, estado del proveedor y su identificador de mensaje cuando exista; distinguir enviado de entregado; reintentar fallos temporales de forma limitada y marcar fallos permanentes para revisión. El mensaje no debe exponer datos personales innecesarios y el fallo del proveedor no debe revertir una inscripción confirmada. |
 | RF-08 | Cobertura y reportes | El sistema debe mostrar un mapa con la cantidad de beneficiarios activos por zona o distrito. |
 | RF-09 | Cobertura y reportes | El sistema debe generar reportes de cobertura, comparando beneficiarios registrados frente a la población estimada por zona. |
 | RF-10 | Cobertura y reportes | El sistema debe permitir exportar el padrón depurado en Excel/PDF. |
@@ -63,4 +63,18 @@ La decisión final corresponde al personal de la Sub Gerencia expresamente autor
 La resolución debe registrar como mínimo: identificador de alerta, persona/inscripciones implicadas, programa y comités involucrados, resultado, motivo o evidencia revisada, usuario que decide, fecha/hora y cualquier cambio posterior realizado. El historial no debe borrarse ni sobrescribirse; una corrección posterior se registra como una nueva operación auditada. Mientras la alerta esté pendiente, no se confirma la nueva inscripción en conflicto. La coincidencia de DNI por sí sola no autoriza a eliminar registros ni a desactivar a la persona en otros programas.
 
 Estos resultados y la autoridad responsable son una propuesta de diseño que la Municipalidad debe aprobar antes de implementar.
+
+
+
+## Política de notificaciones y fallos del proveedor
+
+- **Destinatario y consentimiento:** antes de enviar, verificar que exista un número válido y que el contacto corresponda a la persona o representante autorizado. El uso de WhatsApp/SMS y cualquier requisito de consentimiento o plantilla del proveedor deberán validarse con la Municipalidad y el proveedor elegido.
+- **Contenido mínimo:** los mensajes deben evitar DNI completo, detalles sensibles y datos innecesarios. Se limitarán a informar que existe una actualización o tarea y a indicar un canal oficial para consultar más detalles.
+- **Estados trazables:** registrar el tipo de aviso, inscripción relacionada, canal, fecha/hora, proveedor, identificador de mensaje del proveedor cuando exista y estado: pendiente, enviado al proveedor, entregado, fallido o estado desconocido. “Enviado” no equivale a “entregado”.
+- **Fallos y reintentos:** los errores temporales podrán reintentarse con espera progresiva y un límite configurable. Los errores permanentes (por ejemplo, número inválido o destinatario no disponible) no deben reintentarse indefinidamente; se marcarán para revisión o corrección del contacto.
+- **Evitar duplicados:** cada aviso tendrá un identificador interno único y se comprobará el estado previo antes de reintentar. Si el proveedor no ofrece idempotencia, se reconocerá que un tiempo de espera puede dejar el resultado incierto y se evitará afirmar que no se envió; el caso se registrará para reconciliación.
+- **Desacoplamiento:** la falla del proveedor no debe revertir una inscripción ya confirmada ni impedir el uso principal del sistema. La tarea de notificación quedará registrada para seguimiento. Se puede implementar una cola o patrón Outbox cuando exista la aplicación; no se afirma que ya exista.
+- **Supervisión:** personal autorizado podrá consultar fallos y reintentar o corregir contactos según sus permisos. Los registros de notificación deberán respetar las reglas de privacidad y auditoría.
+
+La selección del proveedor, costos, consentimiento, plantillas, límites de reintento y reglas de contacto deben confirmarse antes de la implementación. Este apartado define el comportamiento esperado, no una integración ya desplegada.
 
