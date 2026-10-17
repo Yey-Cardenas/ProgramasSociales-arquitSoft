@@ -81,6 +81,7 @@ Las reglas de integridad, las validaciones de negocio y las transacciones deber�
 
 - La primera versión valida el DNI mediante los datos registrados en el propio sistema. Las integraciones directas con RENIEC y SISFOH quedan para una fase posterior.
 - Las capacidades PWA y el soporte offline se implementarán dentro de la aplicación web ASP.NET Core MVC; no implican desarrollar un frontend independiente.
+- La sincronización offline utilizará registros pendientes identificados de forma única, reintentos idempotentes y validación final del lado servidor. Los estados y conflictos se mostrarán al usuario; los conflictos no producirán sobrescrituras automáticas. La persistencia local debe limitar los datos personales y excluirlos de la caché de recursos estáticos.
 - Las notificaciones SMS/WhatsApp dependen de la disponibilidad y configuración de un proveedor externo.
 - El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 9 MVC, Razor, Entity Framework Core 9 y Microsoft SQL Server**.
 
