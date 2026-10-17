@@ -15,6 +15,14 @@ Mostrar el sistema como una sola unidad, identificando quiénes lo utilizan, qu�
 | Qué no muestra | Tecnologías internas, clases, servidores ni estructura detallada de módulos |
 | Siguiente vista | [Nivel 2 — Contenedores](C4-Nivel-2-Contenedores.md) |
 
+## Versión visual estilo Draw.io
+
+Esta es una versión gráfica adicional con el mismo contenido arquitectónico. El diagrama Mermaid original de este documento se conserva sin cambios.
+
+![Nivel 1 — Contexto del sistema — versión visual](visual/C4-Nivel-1-Contexto.svg)
+
+- [Abrir fuente editable en Draw.io](visual/C4-Nivel-1-Contexto.drawio)
+
 ```mermaid
 flowchart LR
     dirigente["Dirigente de comité<br/>Gestiona registros de su comité"]
