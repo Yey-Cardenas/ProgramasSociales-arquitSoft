@@ -36,7 +36,7 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 - **Base de datos:** Azure SQL Database (servicio administrado relacional compatible con el ecosistema SQL Server).
 - **ORM:** Entity Framework Core 10.
 
-**Estado de la versión:** .NET 10 LTS, ASP.NET Core 10 y Entity Framework Core 10 son el objetivo tecnológico recomendado para la implementación. Como el repositorio contiene documentación y no el código de la aplicación, esta actualización aún no constituye una migración ejecutada ni probada.
+**Estado de la versión:** .NET 10 LTS, ASP.NET Core 10 y Entity Framework Core 10 son el objetivo tecnológico recomendado para la implementación. Se elige .NET 10 porque es LTS y tiene soporte previsto hasta noviembre de 2028; .NET 9 termina su soporte el 10 de noviembre de 2026. ASP.NET Core y EF Core siguen el ciclo de soporte de la versión de .NET correspondiente. Antes de implementar, se deben instalar los parches vigentes y probar las dependencias. Referencias oficiales: [política de soporte de .NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core) y [versiones y soporte de EF Core](https://learn.microsoft.com/en-us/ef/core/what-is-new/). Como el repositorio contiene documentación y no el código de la aplicación, esta decisión aún no constituye una migración ejecutada ni probada.
 
 ## ☁️ Despliegue recomendado
 
