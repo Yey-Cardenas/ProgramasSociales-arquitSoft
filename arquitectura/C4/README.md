@@ -9,9 +9,12 @@
 - [Nivel 1 — Contexto del sistema](C4-Nivel-1-Contexto.md)
 - [Nivel 2 — Contenedores](C4-Nivel-2-Contenedores.md)
 - [Nivel 3 — Componentes](C4-Nivel-3-Componentes.md)
+- [Nivel 4 — Código (vista complementaria)](C4-Nivel-4-Codigo.md)
 - [Vista de despliegue propuesta](C4-Despliegue-Fisico.md)
 
-Cada archivo contiene un bloque Mermaid `flowchart`. GitHub puede renderizar los diagramas Mermaid directamente dentro de los archivos Markdown, lo que permite visualizarlos y editarlos como texto.
+Los niveles 1, 2 y 3 describen contexto, contenedores y componentes. El nivel 4 es una vista de código complementaria y selectiva: no es obligatorio en todas las presentaciones C4 y se centra en clases y un flujo representativo. La vista de despliegue es una perspectiva física adicional.
+
+Los diagramas están escritos en Markdown con Mermaid. GitHub puede renderizar los bloques Mermaid directamente dentro de los archivos, lo que permite visualizarlos y editarlos como texto. Los diagramas preexistentes en otros documentos del repositorio se conservan sin cambios.
 
 ## Criterios de interpretación
 
