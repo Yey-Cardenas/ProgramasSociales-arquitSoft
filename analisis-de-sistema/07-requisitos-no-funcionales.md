@@ -18,7 +18,7 @@ Los RNF complementan los escenarios de atributos de calidad de [04-atributos-de-
 | **RNF-06** | Auditabilidad | Cada alta, modificación, baja lógica o decisión de revisión que afecte al padrón, así como las importaciones, exportaciones y cambios de permisos, deberá registrar usuario responsable, fecha/hora del servidor, operación, registro afectado, resultado y motivo cuando corresponda. Los usuarios ordinarios no podrán modificar ni eliminar eventos; las correcciones se registrarán como nuevos eventos. El historial será consultable solo por roles autorizados. | Ejecutar operaciones de prueba y comprobar la integridad y permisos de consulta del historial. | AC06 |
 | **RNF-07** | Capacidad y escalabilidad | La solución deberá procesar un padrón de al menos **15 000 beneficiarios** sin superar los umbrales de rendimiento acordados. Como umbral inicial por validar, se propone que el percentil 95 de las consultas habituales del padrón no supere **2 segundos** con 20 usuarios concurrentes, excluyendo exportaciones y generación de mapas pesados. | Prueba de carga con 20 usuarios virtuales durante al menos 30 minutos después del calentamiento, repetida tres veces en condiciones comparables; registrar percentiles, errores y recursos utilizados. Objetivo inicial sujeto a aprobación. | AC07 |
 | **RNF-08** | Mantenibilidad y extensibilidad | Incorporar un nuevo programa social debe poder realizarse mediante un módulo cohesionado y reglas/configuración específicas, sin duplicar los módulos transversales de autenticación, auditoría y acceso a datos ni alterar los programas existentes. La necesidad de cambios en componentes compartidos deberá documentarse en la revisión de diseño. | Revisión arquitectónica y ejercicio de diseño para un programa adicional, con análisis de impacto documentado. | AC08 |
-| **RNF-09** | Respaldo y recuperación | La base de datos deberá respaldarse al menos una vez al día. Como propuesta inicial por validar, conservar los respaldos durante 30 días y realizar pruebas de restauración al menos trimestrales. Se proponen RTO de hasta 8 horas y RPO de hasta 24 horas, pendientes de aprobación municipal y verificación con la configuración contratada de Azure SQL Database. Estos objetivos no constituyen garantías ni se consideran probados hasta realizar ejercicios de recuperación. | Revisar bitácoras de respaldo, permisos, retención, resultados de restauración y evidencia medida de RTO/RPO en pruebas. | AC09 |
+| **RNF-09** | Respaldo y recuperación | Configurar Azure SQL Database para cumplir la retención y recuperación a un punto en el tiempo aprobadas. Objetivos iniciales pendientes de aprobación: RTO de hasta 8 horas y RPO de hasta 24 horas. Realizar pruebas de restauración al menos trimestrales y después de cambios relevantes. | Revisar la configuración y retención contratadas, restaurar en entorno aislado, validar integridad y medir RTO/RPO; registrar desviaciones y acciones correctivas. | AC09 |
 
 ## Decisiones pendientes de validación
 
@@ -324,3 +324,36 @@ La selección final de conjuntos de datos, denominador de cobertura, responsable
 6. El usuario recibe una advertencia sobre las limitaciones del almacenamiento local y el riesgo de pérdida o robo del dispositivo.
 
 Estas reglas describen el diseño esperado y quedan pendientes de implementación y pruebas. La Municipalidad debe aprobar los periodos de conservación local y las reglas para descartar operaciones pendientes.
+
+
+## Procedimiento operativo de respaldo y recuperación
+
+Los objetivos de esta sección son metas de diseño iniciales, no compromisos de disponibilidad hasta que la Municipalidad los apruebe y se validen en el servicio contratado.
+
+### Objetivos iniciales
+- **RTO (tiempo objetivo de recuperación):** hasta 8 horas desde la declaración del incidente hasta que el servicio esencial vuelva a estar disponible y haya superado las verificaciones funcionales.
+- **RPO (punto objetivo de recuperación):** hasta 24 horas de cambios confirmados en el servidor, como máximo, que podrían perderse en el escenario de recuperación acordado. El RPO real depende de la configuración de respaldo/recuperación de Azure SQL Database y debe medirse.
+- **Frecuencia y retención:** comprobar que la configuración de Azure SQL Database cubra las necesidades de recuperación a un punto en el tiempo y conservar una retención inicial objetivo de 30 días, pendiente de validar por costo, configuración y obligaciones de conservación. No asumir que una política manual de “respaldo diario” describe por sí sola todos los respaldos automáticos del servicio administrado.
+
+### Responsables y procedimiento
+1. La Municipalidad designará un responsable de incidentes y un suplente con permisos restringidos para iniciar la recuperación.
+2. Registrar hora de detección, alcance, sistemas afectados, último punto de recuperación disponible y decisión tomada.
+3. Restaurar primero en un entorno aislado, nunca sobrescribir la base de producción como primera acción.
+4. Verificar integridad de tablas, relaciones, conteos de referencia, auditoría, usuarios/roles y consistencia de inscripciones; revisar también la configuración y los secretos por canales seguros.
+5. Medir el tiempo transcurrido y la antigüedad del último cambio recuperado. Si se exceden RTO/RPO, registrar la desviación y aprobar medidas correctivas.
+6. Autorizar el retorno a producción únicamente tras la validación del responsable designado; registrar hora de reapertura y comunicar el estado a los usuarios.
+7. Ejecutar pruebas de restauración al menos trimestrales y después de cambios relevantes en la estrategia de respaldo. Conservar evidencias sin incluir datos personales innecesarios.
+
+### Alcance y límites
+Los respaldos de la base de datos no recuperan automáticamente operaciones que solo existían en el almacenamiento local de un dispositivo y nunca se sincronizaron con el servidor. La interfaz debe advertir que los registros offline pendientes no son una copia de seguridad central. La recuperación de la aplicación, configuración, archivos de importación y secretos debe documentarse por separado, sin guardar secretos en GitHub.
+
+### Criterios de aceptación
+- Existe un responsable titular y un suplente identificados por la Municipalidad.
+- La configuración contratada de Azure SQL Database y su retención están documentadas.
+- Una restauración de prueba puede completarse en un entorno aislado y su resultado queda registrado.
+- Se verifica integridad y se mide el RTO desde la declaración del incidente hasta la validación del servicio.
+- Se calcula el RPO con la antigüedad del último cambio confirmado recuperado.
+- Se documentan las limitaciones de recuperación de operaciones exclusivamente locales y no sincronizadas.
+- Cualquier incumplimiento de objetivos produce un registro de desviación y una acción correctiva.
+
+Los plazos, responsables y objetivos finales requieren aprobación municipal. Los valores propuestos no deben presentarse como garantías ni como resultados probados hasta completar las pruebas.
