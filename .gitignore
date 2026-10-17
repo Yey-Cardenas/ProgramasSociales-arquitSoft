@@ -1,0 +1,36 @@
+# Compilación y artefactos de Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Resultados de pruebas y cobertura
+TestResults/
+[Tt]est[Rr]esult*/
+coverage/
+coverage.*
+
+# Paquetes y artefactos generados
+*.nupkg
+*.snupkg
+artifacts/
+
+# Configuración local y secretos: mantener versionados los archivos de ejemplo
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+secrets.*.json
+!secrets.example.json
+*.pfx
+*.p12
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
