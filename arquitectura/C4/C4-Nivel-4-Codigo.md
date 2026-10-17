@@ -18,6 +18,14 @@ Mostrar, de forma selectiva, cómo podrían colaborar las clases principales de 
 
 ## 2. Diagrama de clases
 
+## Versión visual estilo Draw.io
+
+Esta es una versión gráfica adicional con el mismo contenido arquitectónico. El diagrama Mermaid original de este documento se conserva sin cambios.
+
+![Nivel 4 — Código — versión visual](visual/C4-Nivel-4-Codigo.svg)
+
+- [Abrir fuente editable en Draw.io](visual/C4-Nivel-4-Codigo.drawio)
+
 ```mermaid
 classDiagram
     direction TB
