@@ -1,6 +1,18 @@
 # Vista de despliegue propuesta
 
-La siguiente vista representa una topología recomendada, no una infraestructura que ya se encuentre desplegada.
+**Proyecto:** Sistema de Gestión de Programas Sociales – Huamanga  
+**Tipo de vista:** Despliegue físico propuesto · **Versión:** 1.1 · **Estado:** no desplegado
+
+## 1. Objetivo
+
+Mostrar dónde se propone ejecutar la aplicación y dónde se almacenan los datos centrales, además de las conexiones de red con los usuarios y servicios externos.
+
+| Aspecto | Descripción |
+|---|---|
+| Pregunta que responde | ¿Dónde se ejecutan los elementos y cómo se conectan? |
+| Audiencia | Arquitectura, desarrollo y operaciones |
+| Entornos considerados | Navegador de usuario, Microsoft Azure y proveedor de notificaciones |
+| Advertencia | Es una propuesta de despliegue; no acredita que los recursos ya existan ni que hayan sido probados |
 
 ```mermaid
 flowchart TB
@@ -24,7 +36,16 @@ flowchart TB
     app -->|"HTTPS: solicitudes de envío"| gateway
 ```
 
-## Recomendaciones de despliegue
+## 3. Nodos y relaciones
+
+| Nodo | Elementos alojados | Relación principal |
+|---|---|---|
+| Dispositivo del usuario | Navegador web, interfaz Razor y capacidades PWA | Accede a la aplicación mediante HTTPS |
+| Azure App Service | Aplicación ASP.NET Core 10 MVC | Atiende solicitudes y ejecuta las reglas de aplicación |
+| Azure SQL Database | Datos centrales, inscripciones, auditoría y metadatos | Recibe conexiones cifradas desde la aplicación |
+| Proveedor SMS / WhatsApp | Servicio externo de notificaciones | Recibe solicitudes de envío mediante HTTPS |
+
+## 4. Recomendaciones de despliegue
 
 - Alojar la aplicación ASP.NET Core MVC en Azure App Service y mantener Azure SQL Database como servicio administrado separado.
 - Restringir el acceso a la base de datos a la aplicación; no permitir acceso público irrestricto.
