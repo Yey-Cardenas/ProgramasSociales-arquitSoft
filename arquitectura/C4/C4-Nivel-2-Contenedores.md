@@ -15,6 +15,14 @@ Abrir la caja del sistema del nivel 1 y mostrar las aplicaciones y almacenes de 
 | Nivel anterior | [Nivel 1 — Contexto](C4-Nivel-1-Contexto.md) |
 | Siguiente vista | [Nivel 3 — Componentes](C4-Nivel-3-Componentes.md) |
 
+## Versión visual estilo Draw.io
+
+Esta es una versión gráfica adicional con el mismo contenido arquitectónico. El diagrama Mermaid original de este documento se conserva sin cambios.
+
+![Nivel 2 — Contenedores — versión visual](visual/C4-Nivel-2-Contenedores.svg)
+
+- [Abrir fuente editable en Draw.io](visual/C4-Nivel-2-Contenedores.drawio)
+
 ```mermaid
 flowchart TB
     dirigente["Dirigente de comité"]
