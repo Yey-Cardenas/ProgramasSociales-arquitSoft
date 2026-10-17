@@ -136,3 +136,18 @@ Este flujo es una propuesta para revisión del área usuaria; los plazos, eviden
 
 **Criterios mínimos de aceptación:** la tarea se genera por inscripción; la falta de respuesta deja el caso pendiente o escalado; los cambios y decisiones quedan auditados; solo el rol autorizado registra la decisión final; y ninguna inscripción de otro programa se modifica automáticamente.
 
+
+
+## Plan de medición y aceptación del rendimiento
+
+Los valores de rendimiento documentados son objetivos iniciales que deben validarse con la Municipalidad y el equipo técnico; no representan resultados medidos. Como protocolo de aceptación propuesto:
+
+1. **Datos de prueba:** preparar un conjunto sintético de al menos 15 000 personas e inscripciones, con distribución de programas y comités y casos de DNI existente/no existente. No usar datos personales reales en pruebas ordinarias.
+2. **Entorno registrado:** documentar versión de .NET y EF Core, configuración de Azure App Service y Azure SQL Database, región, nivel de servicio, índices, tamaño de la base, red y versión del código. No comparar resultados de entornos con configuraciones distintas sin señalarlo.
+3. **Preparación:** ejecutar una fase de calentamiento que no se incluya en las mediciones; verificar que el conjunto de datos y el estado de la base sean reproducibles.
+4. **Validación de DNI (RNF-02):** medir desde la recepción de la solicitud en el servidor hasta la respuesta de validación, incluyendo consulta a la base de datos y reglas de duplicidad, pero excluyendo latencia de la red del cliente. Registrar p50, p95, p99, errores y número de solicitudes. Criterio propuesto: p95 menor de 500 ms.
+5. **Consultas habituales (RNF-07):** definir previamente las consultas incluidas (búsqueda/listado paginado y filtros habituales; no exportaciones masivas ni mapas pesados). Ejecutar una prueba de carga con 20 usuarios virtuales concurrentes durante al menos 30 minutos, tras el calentamiento, y registrar p50/p95/p99, errores, CPU, memoria y conexiones a la base de datos. Criterio propuesto: p95 menor de 2 segundos.
+6. **Repetición:** ejecutar cada escenario al menos tres veces en condiciones comparables. Guardar scripts, fecha, configuración, resultados y defectos encontrados. Se acepta el objetivo solo si las ejecuciones cumplen el umbral acordado y no se producen errores funcionales ni pérdida/inconsistencia de datos.
+7. **Informe y decisión:** documentar resultados reales frente a objetivos; si no se cumplen, registrar la causa y la acción correctiva. Los umbrales definitivos y el perfil de carga deben ser aprobados antes de considerarlos requisitos contractuales.
+
+Estas pruebas quedan pendientes hasta que exista una implementación ejecutable, base de datos de prueba y entorno de despliegue. No se afirma que el sistema cumpla actualmente los umbrales.
