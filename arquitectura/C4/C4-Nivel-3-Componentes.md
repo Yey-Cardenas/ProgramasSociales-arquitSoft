@@ -16,14 +16,6 @@ Abrir el contenedor de aplicación web del nivel 2 y mostrar los componentes ló
 | Nivel anterior | [Nivel 2 — Contenedores](C4-Nivel-2-Contenedores.md) |
 | Vista de código complementaria | [Nivel 4 — Código](C4-Nivel-4-Codigo.md) |
 
-## Versión visual estilo Draw.io
-
-Esta es una versión gráfica adicional con el mismo contenido arquitectónico. El diagrama Mermaid original de este documento se conserva sin cambios.
-
-![Nivel 3 — Componentes — versión visual](visual/C4-Nivel-3-Componentes.svg)
-
-- [Abrir fuente editable en Draw.io](visual/C4-Nivel-3-Componentes.drawio)
-
 ```mermaid
 flowchart TB
     usuario["Dirigente de comité /<br/>Personal municipal autorizado"]

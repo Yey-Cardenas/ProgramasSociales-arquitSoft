@@ -14,14 +14,6 @@ Mostrar dónde se propone ejecutar la aplicación y dónde se almacenan los dato
 | Entornos considerados | Navegador de usuario, Microsoft Azure y proveedor de notificaciones |
 | Advertencia | Es una propuesta de despliegue; no acredita que los recursos ya existan ni que hayan sido probados |
 
-## Versión visual estilo Draw.io
-
-Esta es una versión gráfica adicional con el mismo contenido arquitectónico. El diagrama Mermaid original de este documento se conserva sin cambios.
-
-![Vista de despliegue físico — versión visual](visual/C4-Despliegue-Fisico.svg)
-
-- [Abrir fuente editable en Draw.io](visual/C4-Despliegue-Fisico.drawio)
-
 ```mermaid
 flowchart TB
     subgraph cliente["Dispositivo del usuario · Windows / Android 8+ sujeto a pruebas"]
