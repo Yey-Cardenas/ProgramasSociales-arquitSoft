@@ -36,6 +36,10 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 - **Base de datos:** Microsoft SQL Server.
 - **ORM:** Entity Framework Core 9.
 
+## ☁️ Despliegue recomendado
+
+Se propone la opción A: **Azure App Service** para alojar la aplicación ASP.NET Core 9 MVC y un servicio de base de datos administrado separado. **Azure SQL Database** es la primera alternativa por evaluar, previa verificación de compatibilidad con las consultas y migraciones de Entity Framework Core 9. La base de datos debe restringirse para que solo la aplicación pueda conectarse, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se deben estimar los costos mensuales y probar respaldos y restauración. Esta recomendación es de diseño; el repositorio todavía no contiene una aplicación desplegada.
+
 ## 📚 Documentación del repositorio
 
 El repositorio contiene actualmente documentación de análisis y diseño. La existencia de un documento describe una decisión o requisito previsto; no implica que la funcionalidad esté implementada o probada.

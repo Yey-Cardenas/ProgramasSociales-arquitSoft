@@ -100,7 +100,22 @@ Las integraciones con servicios externos se realizarán desde servicios de la ap
 | Los módulos pueden acoplarse con el tiempo. | Mantener límites claros, interfaces y pruebas entre módulos. |
 | Un fallo de la aplicación puede afectar varias funciones. | Incorporar manejo de errores, registros de auditoría y copias de seguridad periódicas. |
 
-## 8. Stack tecnológico de referencia
+## 8. Recomendación de despliegue en la nube
+
+Se recomienda la opción A: alojar la aplicación ASP.NET Core 9 MVC en **Azure App Service** y mantener la base de datos en un recurso administrado separado. La primera alternativa a evaluar para datos es **Azure SQL Database**, por su administración de infraestructura, mantenimiento y respaldos. Esta separación es de despliegue y operación; la solución sigue siendo un monolito modular, no una arquitectura de microservicios.
+
+Criterios para el despliegue:
+
+- Mantener la base de datos sin exposición pública y permitir conexiones solo desde la aplicación, preferentemente mediante conectividad privada/VNet cuando el nivel de servicio y el presupuesto lo permitan.
+- Guardar cadenas de conexión y secretos en una configuración segura, como Azure Key Vault o la configuración protegida del servicio; nunca versionarlos en GitHub.
+- Activar HTTPS, control de acceso por roles, monitoreo y respaldos; verificar la restauración de una copia.
+- Revisar costos de App Service, base de datos, almacenamiento, monitoreo y red antes de elegir los planes.
+- Probar las migraciones de EF Core 9 y todas las consultas con datos de prueba antes de migrar la base de datos.
+- Confirmar que Azure SQL Database soporte todas las funciones necesarias. Si el sistema requiere características exclusivas de SQL Server instalado, elegir una opción de alojamiento compatible en lugar de asumir equivalencia total.
+
+Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero debe documentarse cualquier reducción de seguridad. La configuración de producción debe aplicar restricciones de red y protección de datos desde el inicio.
+
+## 9. Stack tecnológico de referencia
 
 - **Backend y framework web:** C# con ASP.NET Core 9 MVC.
 - **Presentación:** vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap.
