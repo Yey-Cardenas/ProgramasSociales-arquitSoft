@@ -42,6 +42,10 @@ El proyecto está diseñado bajo un enfoque de **monolito modular** utilizando e
 
 Se define la opción A como despliegue recomendado: **Azure App Service** para alojar la aplicación ASP.NET Core 10 MVC y **Azure SQL Database** como servicio administrado de base de datos separado. Antes de una implementación real se comprobará la compatibilidad de las consultas, tipos de datos, migraciones de Entity Framework Core 10 y demás funcionalidades necesarias. El acceso a la base de datos se restringirá a la aplicación, preferentemente mediante conectividad privada. Los secretos no deben guardarse en el repositorio. Antes de desplegar, se estimarán los costos mensuales y se probarán los respaldos y la restauración. Esta es una decisión de diseño documentada; el repositorio todavía no contiene una aplicación desplegada.
 
+### Política de seguridad de red y credenciales
+
+En producción, Azure SQL Database no tendrá acceso público irrestricto. Se preferirá conectividad privada desde Azure App Service; si no es viable, se deberán aplicar reglas de firewall restrictivas y documentadas. Cuando sea compatible con la configuración, se preferirá la identidad administrada de App Service y permisos mínimos. Las cadenas de conexión y secretos se configurarán fuera de GitHub. Los accesos públicos temporales para desarrollo se limitarán a las IP necesarias y se retirarán al terminar las pruebas. La configuración real deberá verificarse antes del despliegue.
+
 ### Criterios de compatibilidad con Azure SQL Database
 
 La aplicación usará el proveedor de Entity Framework Core para SQL Server (Microsoft.EntityFrameworkCore.SqlServer) con una cadena de conexión específica para Azure SQL Database. Esta elección es compatible a nivel de familia de motor, pero no significa que toda consulta o característica de SQL Server esté disponible en Azure SQL Database sin ajustes.

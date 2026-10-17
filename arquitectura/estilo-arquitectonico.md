@@ -106,14 +106,14 @@ Se recomienda la opción A: alojar la aplicación ASP.NET Core 10 MVC en **Azure
 
 Criterios para el despliegue:
 
-- Mantener la base de datos sin exposición pública y permitir conexiones solo desde la aplicación, preferentemente mediante conectividad privada/VNet cuando el nivel de servicio y el presupuesto lo permitan.
-- Guardar cadenas de conexión y secretos en una configuración segura, como Azure Key Vault o la configuración protegida del servicio; nunca versionarlos en GitHub.
+- Evitar el acceso público irrestricto a la base de datos. Preferir conectividad privada/VNet desde la aplicación; si no es viable, documentar reglas de firewall restrictivas y permitir solo los orígenes necesarios.
+- Mantener cadenas de conexión y secretos fuera de GitHub, usando configuración segura del entorno o Azure Key Vault. Cuando sea compatible, preferir identidad administrada de App Service y permisos mínimos.
 - Activar HTTPS, control de acceso por roles, monitoreo y respaldos; verificar la restauración de una copia.
 - Revisar costos de App Service, base de datos, almacenamiento, monitoreo y red antes de elegir los planes.
 - Probar las migraciones de EF Core 10 y todas las consultas con datos de prueba antes de migrar la base de datos.
 - Confirmar mediante pruebas que Azure SQL Database soporte todas las funciones necesarias. Si se requiere una característica no disponible en este servicio, documentar y aprobar una alternativa antes de modificar la decisión.
 
-Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero debe documentarse cualquier reducción de seguridad. La configuración de producción debe aplicar restricciones de red y protección de datos desde el inicio.
+Para una demostración académica se puede empezar con niveles económicos y datos ficticios, pero cualquier acceso temporal desde IP pública debe limitarse a las IP de desarrollo autorizadas y retirarse al terminar las pruebas. La configuración de producción no debe permitir acceso público irrestricto y debe aplicar restricciones de red y protección de datos desde el inicio.
 
 ## Criterios de persistencia y compatibilidad
 
@@ -129,3 +129,14 @@ Azure SQL Database será el servicio de base de datos administrado y Entity Fram
 - **PWA:** capacidades web progresivas y soporte offline dentro de los límites definidos para la aplicación.
 
 No se asumen React, Node.js, Express, Prisma ni PostgreSQL como parte del stack aprobado, ya que no corresponden a las tecnologías indicadas en el `README.md`.
+
+
+## Política de acceso seguro a Azure SQL Database
+
+- **Producción:** no permitir acceso público irrestricto a la base de datos. Se prefiere un punto de conexión privado con la conectividad de red correspondiente entre Azure App Service y Azure SQL Database.
+- **Alternativa condicionada:** si la conectividad privada no es viable por el plan o el presupuesto, evaluar el punto de conexión público con reglas de firewall restrictivas y documentadas. Solo se permitirán los orígenes de red necesarios; se revisarán las direcciones de salida de App Service cuando cambien la configuración o el plan.
+- **Identidad y permisos:** cuando sea compatible con la configuración elegida, preferir la identidad administrada de App Service para autenticarse en Azure SQL Database. Conceder a la aplicación únicamente los permisos que necesita y separar los permisos de ejecución de los permisos administrativos.
+- **Desarrollo:** cualquier acceso temporal desde una IP pública deberá autorizarse solo para las IP de desarrollo necesarias, usar credenciales de desarrollo y retirarse al terminar las pruebas. No se utilizarán excepciones de desarrollo como configuración de producción.
+- **Secretos y transporte:** no guardar contraseñas ni cadenas de conexión con secretos en GitHub. Configurarlas mediante mecanismos seguros del entorno de ejecución; mantener el cifrado en tránsito y verificar el certificado del servidor.
+- **Verificación:** antes del despliegue, revisar las reglas de red, los permisos efectivos y la conexión desde la aplicación. Estas son medidas de diseño pendientes de configuración y prueba, no una afirmación de que la infraestructura ya esté protegida.
+
