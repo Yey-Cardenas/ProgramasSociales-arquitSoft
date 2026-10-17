@@ -7,7 +7,7 @@ Formato: **Como [actor], quiero [acción], para [beneficio].**
 | ID | Historia de usuario |
 |----|---------------------|
 | HU01 | Como dirigente de comité, quiero registrar beneficiarios con su DNI, para mantener actualizado el padrón de mi comité. |
-| HU02 | Como dirigente de comité, quiero que el sistema me avise si un DNI ya está inscrito en otro comité, para evitar registrar a una persona duplicada. |
+| HU02 | Como dirigente de comité, quiero que el sistema detecte inscripciones existentes por DNI y me avise cuando una inscripción en otro comité del mismo programa requiera revisión, para evitar duplicados sin impedir automáticamente una inscripción válida en otro programa. |
 | HU03 | Como dirigente de comité, quiero marcar a un beneficiario como inactivo (fallecimiento, cambio de condición o inasistencia prolongada), para que el padrón solo contenga beneficiarios vigentes. |
 | HU04 | Como personal de la Sub Gerencia, quiero recibir alertas de posibles duplicados y consultar el historial de cambios del padrón, para evaluarlos y depurar el padrón. |
 | HU05 | Como personal de la Sub Gerencia, quiero que cada beneficiario se revalide periódicamente (cada 6 meses), para detectar a quienes ya no califican. |
