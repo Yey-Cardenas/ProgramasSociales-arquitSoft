@@ -70,3 +70,8 @@ Los padrones históricos se importarán primero a un área temporal de staging; 
 ## Restricciones de exportación de padrones
 
 Los archivos exportados contienen potencialmente datos personales y estarán sujetos a permisos por rol y ámbito. El dirigente se limitará a su comité asignado; el personal municipal operará dentro de su ámbito autorizado. El padrón completo y el DNI completo no estarán disponibles por defecto en reportes generales. La Municipalidad debe definir campos permitidos, responsables de excepciones, canales de intercambio y retención de copias.
+
+
+## Restricciones de auditoría
+
+Los eventos de auditoría no podrán ser modificados ni eliminados por usuarios ordinarios. El acceso a la consulta del historial y a la administración de la plataforma deberá limitarse por permisos. La Municipalidad debe definir el plazo de conservación y los responsables de supervisión. La aplicación no debe registrar contraseñas, tokens ni datos personales innecesarios en los logs.
