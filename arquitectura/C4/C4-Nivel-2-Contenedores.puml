@@ -1,0 +1,25 @@
+@startuml C4-Nivel-2-Contenedores
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+title C4 - Nivel 2: Contenedores del Sistema de Gestión de Programas Sociales
+
+Person(dirigente, "Dirigente de comité", "Acceso limitado a su comité asignado.")
+Person(personal, "Personal municipal autorizado", "Acceso según rol y ámbito autorizado.")
+System_Ext(gateway, "Proveedor SMS / WhatsApp", "Servicio externo.")
+System_Ext(padrones, "Padrones históricos", "Excel/CSV y documentos revisados.")
+
+System_Boundary(sgps, "Sistema de Gestión de Programas Sociales") {
+  Container(web, "Aplicación web", "C# / ASP.NET Core 10 MVC + Razor", "Monolito modular en capas; autenticación, autorización, reglas de negocio, auditoría y reportes.")
+  ContainerDb(db, "Base de datos", "Azure SQL Database", "Personas, programas, comités, inscripciones, importaciones, auditoría y estados de notificación.")
+  Container(pwa, "Almacenamiento local del navegador", "PWA / almacenamiento web", "Recursos estáticos y operaciones mínimas pendientes; no es una fuente confirmada del padrón.")
+}
+
+Rel(dirigente, web, "HTTPS; usa las vistas Razor")
+Rel(personal, web, "HTTPS; usa las vistas Razor")
+Rel(web, db, "EF Core 10 / proveedor SQL Server", "TLS")
+Rel(web, gateway, "API del proveedor para notificaciones", "HTTPS")
+Rel(padrones, web, "Carga controlada a staging")
+Rel(web, pwa, "Entrega recursos y sincroniza operaciones autorizadas")
+Rel(pwa, web, "Sincronización al recuperar conectividad", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
