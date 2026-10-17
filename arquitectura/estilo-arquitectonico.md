@@ -50,6 +50,8 @@ Es la continuación de la arquitectura inicial del Entregable 02.
 | D6 | Las integraciones externas se encapsulan en la capa de negocio. |
 | D7, D8 | Es simple de construir, probar y desplegar con un equipo de dos personas. |
 
+Se adopta una arquitectura en capas (Monolito Modular) optimizada para el patrón MVC en ASP.NET Core.   
+
 ## 5. Capas y responsabilidades
 
 | Capa | Responsabilidad | Contiene |
@@ -58,7 +60,7 @@ Es la continuación de la arquitectura inicial del Entregable 02.
 | Lógica de negocio | Reglas del dominio, validaciones, seguridad y auditoría. | Módulos de beneficiarios, programas, inscripciones, entregas, usuarios y reportes. |
 | Datos | Persistencia de la información. | Base de datos relacional. |
 
-**Regla de dependencia:** la presentación nunca accede directamente a la base de datos. La organización interna de la capa de negocio sigue el enfoque de Arquitectura Limpia, descrito en `enfoque-arquitectonico.md`.
+**Regla de dependencia:** la presentación nunca accede directamente a la base de datos.
 
 ## 6. Diagrama
 
@@ -107,6 +109,6 @@ flowchart TD
 | Desventaja | Mitigación |
 |---|---|
 | Escalar implica escalar todo el sistema. | La carga es moderada; se puede replicar la aplicación si crece. |
-| Riesgo de acoplamiento entre módulos. | Organizar el código por módulos con límites claros (ver enfoque arquitectónico). |
+| Riesgo de acoplamiento entre módulos. | Organizar el código por módulos con límites claros (Mitigación: Usar Inyección de Dependencias nativa de .NET para mantener los servicios desacoplados). |
 | Un fallo puede afectar a todo el sistema. | Respaldos periódicos y manejo de errores en las integraciones. |
 
