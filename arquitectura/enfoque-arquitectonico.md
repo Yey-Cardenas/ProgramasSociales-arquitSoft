@@ -1,32 +1,89 @@
-# Enfoque Arquitectónico: Patrón MVC
+# Enfoque arquitectónico: Patrón MVC
 
-**Proyecto:** Sistema de Gestión de Programas Sociales – Huamanga
+**Proyecto:** Sistema de Gestión de Programas Sociales – Huamanga  
 **Curso:** Arquitectura de Software (IS-488) – Semestre 2026-II
 
 ## 1. Definición del enfoque
-El sistema utilizará el patrón **MVC (Modelo-Vista-Controlador)** implementado sobre **ASP.NET Core MVC (.NET 9)**. Este patrón separa la aplicación en tres grupos de componentes principales, facilitando el desarrollo rápido y el mantenimiento.
 
-## 2. Componentes del Patrón
+El sistema utilizará el patrón **Modelo-Vista-Controlador (MVC)** implementado con **C# y ASP.NET Core 9 MVC**, conforme al stack tecnológico establecido en el `README.md`. La aplicación se desplegará como un **monolito modular**: un único sistema organizado en módulos y capas con responsabilidades definidas.
 
-*   **Modelo (Model):** Representa los datos y la lógica de negocio. Incluye las Entidades (Beneficiario, Comité), la configuración de la base de datos mediante **Entity Framework Core**, y la gestión de transacciones utilizando los patrones **Unit of Work y Repository**.
-*   **Vista (View):** Es la interfaz de usuario. Se utilizarán **Vistas Razor (`.cshtml`)** para generar HTML dinámico, optimizado para funcionar en navegadores y adaptarse como PWA (Progressive Web App).
-*   **Controlador (Controller):** Actúa como orquestador. Recibe las peticiones HTTP del usuario (ej. guardar un beneficiario), interactúa con el Modelo para validar los datos o aplicar lógica, y selecciona la Vista adecuada para mostrar el resultado.
+La presentación se implementará con vistas Razor (`.cshtml`), el acceso a datos se realizará mediante Entity Framework Core 9 y la persistencia se gestionará en Microsoft SQL Server. No se plantea un frontend independiente en React ni un backend separado con Node.js/Express.
 
-## 3. Flujo de trabajo (Ejemplo: Registrar Beneficiario)
+## 2. Componentes del patrón MVC
+
+- **Modelo (Model):** representa las entidades y los datos del dominio, así como las reglas y servicios que procesan la información. El acceso a la persistencia se realizará mediante Entity Framework Core 9. Los patrones Repository y Unit of Work podrán utilizarse donde aporten claridad y control transaccional.
+- **Vista (View):** presenta la información al usuario mediante vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap. La interfaz deberá adaptarse a diferentes tamaños de pantalla y podrá incorporar capacidades PWA para apoyar el trabajo con conectividad limitada.
+- **Controlador (Controller):** recibe las peticiones HTTP, valida la entrada, coordina los servicios de negocio y devuelve la vista o respuesta apropiada. Los controladores no deben concentrar reglas de negocio ni acceder directamente a la base de datos.
+
+## 3. Flujo de trabajo: registrar un beneficiario
 
 ```mermaid
 sequenceDiagram
     actor Usuario
-    participant V as Vista (Razor .cshtml)
-    participant C as Controlador (ASP.NET)
-    participant M as Modelo (Unit of Work / EF Core)
-    participant BD as SQL Server (AuditoriaDB)
+    participant V as Vista Razor (.cshtml)
+    participant C as Controlador ASP.NET Core MVC 9
+    participant S as Servicio de negocio (C#)
+    participant D as Entity Framework Core 9
+    participant BD as Microsoft SQL Server
 
-    Usuario->>V: Llena formulario y envía
+    Usuario->>V: Completa y envía el formulario
     V->>C: POST /Beneficiario/Crear
-    C->>M: Validar datos y duplicados
-    M->>BD: Inserción transaccional
-    BD-->>M: Confirmación
-    M-->>C: Resultado exitoso
-    C-->>V: Redirige a lista actualizada
-    V-->>Usuario: Muestra confirmación
+    C->>S: Solicita registrar beneficiario
+    S->>D: Valida y prepara la operación
+    D->>BD: Ejecuta consulta o transacción
+    BD-->>D: Devuelve el resultado
+    D-->>S: Resultado de persistencia
+    S-->>C: Resultado de la operación
+    C-->>V: Redirige o muestra errores
+    V-->>Usuario: Presenta el resultado
+```
+
+## 4. Organización lógica de la solución
+
+| Componente | Responsabilidad | Tecnología |
+|---|---|---|
+| Presentación | Formularios, listados y mensajes de respuesta. | Vistas Razor (`.cshtml`), HTML5, CSS3 y Bootstrap. |
+| Controladores | Recibir solicitudes HTTP y coordinar el flujo de la aplicación. | ASP.NET Core MVC 9. |
+| Servicios de negocio | Aplicar reglas del padrón, validar duplicados, gestionar staging, reportes y notificaciones. | C# sobre .NET 9. |
+| Persistencia | Consultar y guardar información con control de integridad. | Entity Framework Core 9. |
+| Base de datos | Almacenar beneficiarios, programas, comités, inscripciones y registros de auditoría. | Microsoft SQL Server. |
+| Integraciones externas | Enviar notificaciones por SMS/WhatsApp cuando corresponda. | Servicio de integración encapsulado en la capa de negocio. |
+
+## 5. Reglas de dependencia
+
+1. **Presentación:** las vistas se comunican con los controladores; no acceden directamente a la base de datos.
+2. **Controladores:** coordinan las peticiones y delegan las reglas del dominio a los servicios.
+3. **Lógica de negocio:** centraliza validaciones, reglas de duplicidad, staging, reportes y notificaciones.
+4. **Persistencia:** los servicios acceden a los datos mediante la capa de persistencia basada en Entity Framework Core 9.
+5. **Inyección de dependencias:** los servicios y repositorios necesarios se registran en el contenedor nativo de ASP.NET Core, configurado desde `Program.cs`.
+6. **Integraciones externas:** las llamadas a un gateway SMS/WhatsApp se encapsulan en servicios; no se realizan directamente desde las vistas.
+7. **Transacciones:** las operaciones que deban mantener consistencia se ejecutan con transacciones apropiadas en SQL Server.
+
+## 6. Asignación de requisitos a módulos
+
+| Módulo | Requisitos relacionados | Responsabilidad |
+|---|---|---|
+| Autenticación y autorización | RF-12, RF-13, RNF-04 | Validar credenciales y aplicar permisos por rol. ASP.NET Core Identity podrá utilizarse si está contemplado en la implementación. |
+| Registro y padrón | RF-01, RF-03, RF-05, RF-14 | Registrar y actualizar beneficiarios y conservar el historial de cambios. |
+| Detección de duplicados | RF-02, RF-04 | Comprobar duplicados de DNI según las reglas del sistema y comunicar las alertas correspondientes. |
+| Revalidación periódica | RF-06 | Gestionar el proceso de revalidación de beneficiarios según la periodicidad definida. |
+| Notificaciones | RF-07 | Preparar y enviar notificaciones mediante un gateway externo SMS/WhatsApp. |
+| Cobertura y reportes | RF-08, RF-09, RF-10 | Consultar información y generar reportes de beneficiarios activos por zona. |
+| Staging | RF-11 | Importar datos históricos de Excel/CSV, validarlos y limpiarlos antes de incorporarlos al padrón definitivo. |
+
+## 7. Base de datos y persistencia
+
+La base de datos definida para el proyecto es **Microsoft SQL Server**. La aplicación accederá a ella mediante **Entity Framework Core 9**, utilizando el enfoque Code-First indicado en el README. El nombre concreto de la base de datos debe configurarse en el entorno de ejecución y no debe asumirse como definitivo solo por aparecer en un diagrama.
+
+Las reglas de integridad, las validaciones de negocio y las transacciones deberán prevenir registros inconsistentes. Los datos importados mediante staging se validarán antes de consolidarse en el padrón principal.
+
+## 8. Consideraciones de alcance
+
+- La primera versión valida el DNI mediante los datos registrados en el propio sistema. Las integraciones directas con RENIEC y SISFOH quedan para una fase posterior.
+- Las capacidades PWA y el soporte offline se implementarán dentro de la aplicación web ASP.NET Core MVC; no implican desarrollar un frontend independiente.
+- Las notificaciones SMS/WhatsApp dependen de la disponibilidad y configuración de un proveedor externo.
+- El diseño se mantiene alineado con el stack del `README.md`: **C#, ASP.NET Core 9 MVC, Razor, Entity Framework Core 9 y Microsoft SQL Server**.
+
+## 9. Justificación
+
+El enfoque MVC permite separar la presentación, la coordinación de solicitudes y la lógica de negocio. Junto con una organización modular por capas, facilita que el equipo mantenga el sistema, pruebe sus reglas y gestione la persistencia de forma consistente sin introducir tecnologías o servicios distribuidos que no estén contemplados en el README.
