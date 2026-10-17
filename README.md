@@ -85,7 +85,7 @@ El repositorio contiene actualmente documentación de análisis y diseño. La ex
 - [Requisitos no funcionales](analisis-de-sistema/07-requisitos-no-funcionales.md)
 
 ### Arquitectura
-- [Modelo C4 y vista de despliegue](arquitectura/C4/README.md)
+- [Modelo C4 y vista de despliegue (diagramas Markdown/Mermaid)](arquitectura/C4/README.md)
 - [Arquitectura inicial](arquitectura/arquitectura-inicial.md)
 - [Enfoque arquitectónico](arquitectura/enfoque-arquitectonico.md)
 - [Estilo arquitectónico](arquitectura/estilo-arquitectonico.md)
