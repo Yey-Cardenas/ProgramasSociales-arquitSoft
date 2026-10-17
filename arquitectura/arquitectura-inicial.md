@@ -70,6 +70,7 @@ La solución se despliega como un único sistema organizado en módulos cohesion
 - **Acceso a datos:** las vistas y los controladores no deben consultar directamente la base de datos.
 - **Inyección de dependencias:** los servicios y componentes de persistencia necesarios se registran en el contenedor nativo de ASP.NET Core, configurado desde `Program.cs`.
 - **Integraciones externas:** las comunicaciones con el gateway SMS/WhatsApp se encapsulan en servicios y pueden realizarse mediante `HttpClient`; no se llaman directamente desde las vistas.
+- **Sincronización offline:** la PWA conserva en almacenamiento local los registros pendientes y un identificador único por operación. Al recuperar conexión, los envía al servidor; los reintentos deben ser idempotentes. El servidor valida duplicados y reglas de negocio antes de confirmar el alta. Un conflicto queda marcado para revisión, sin sobrescritura automática, y la interfaz informa el estado de cada registro.
 - **Transacciones:** las operaciones que deban mantener la consistencia del padrón se gestionan con transacciones y restricciones apropiadas en SQL Server.
 
 ## 6. Justificaciones de diseño
@@ -77,7 +78,7 @@ La solución se despliega como un único sistema organizado en módulos cohesion
 - **Staging separado del padrón:** los archivos históricos de Excel o CSV pueden contener errores y duplicados. El staging permite validar y limpiar esos datos antes de consolidarlos en el padrón principal.
 - **Persistencia transaccional:** Entity Framework Core 9 junto con SQL Server permite coordinar operaciones relacionadas y mantener la integridad de la información.
 - **Monolito modular:** una aplicación desplegable con módulos bien delimitados reduce la complejidad operativa para el tamaño y alcance del proyecto.
-- **PWA:** las capacidades web progresivas pueden ayudar a los usuarios en zonas con conectividad limitada. El comportamiento offline específico deberá definirse y probarse según las operaciones que realmente deban funcionar sin conexión.
+- **PWA:** las capacidades web progresivas pueden ayudar a los usuarios en zonas con conectividad limitada. Para los registros offline, se mantendrán estados visibles (pendiente, sincronizando, sincronizado o requiere revisión/error), reintentos con espera progresiva ante fallos temporales y validación final en el servidor. Los registros locales no se considerarán confirmados hasta recibir respuesta del servidor. La aplicación no sobrescribirá automáticamente datos ante conflictos. Se debe limitar la información personal almacenada localmente y evitar incluir datos sensibles en la caché de recursos estáticos.
 
 ## 7. Vista de contexto
 
